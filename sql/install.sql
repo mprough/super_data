@@ -31,13 +31,13 @@ INSERT INTO configuration (configuration_id, configuration_title, configuration_
 (NULL, 'Postal Code', 'FACEBOOK_OPEN_GRAPH_ZIP', '', 'Please enter your postal code/zip', @configuration_group_id, 44, NOW(), NULL, NULL),
 (NULL, 'Country', 'FACEBOOK_OPEN_GRAPH_COUNTRY', '', 'Please enter your 2 letter country code such as US', @configuration_group_id, 45, NOW(), NULL, NULL),
 (NULL, 'Email', 'FACEBOOK_OPEN_GRAPH_EMAIL', '', 'Please enter your customer service email address (all lower case!)', @configuration_group_id, 46, NOW(), NULL, NULL),
-(NULL, 'Phone', 'FACEBOOK_OPEN_GRAPH_PHONE', '', 'Please enter your telephone number like this (330) 871-4357. Country code is NOT required.', @configuration_group_id, 47, NOW(), NULL, NULL),
+(NULL, 'Phone', 'FACEBOOK_OPEN_GRAPH_PHONE', '', 'Required. An internationalized version of the phone number, starting with the “+” symbol and country code (+1 in the US and Canada). Like this +1-330-871-4357', @configuration_group_id, 47, NOW(), NULL, NULL),
 (NULL, 'Twitter Handle', 'FACEBOOK_OPEN_GRAPH_TWUSER', '', 'Please enter your Twitter Handle like this @prowebs', @configuration_group_id, 48, NOW(), NULL, NULL),
 (NULL, 'Facebook Page', 'FACEBOOK_OPEN_GRAPH_FBPG', '', 'Please enter your full url/link to your facebook page (https://www.facebook.com/prowebs)', @configuration_group_id, 49, NOW(), NULL, NULL),
-(NULL, 'Locale', 'FACEBOOK_OPEN_GRAPH_LOCALE', '', 'Locale code such as this (en_US)', @configuration_group_id, 50, NOW(), NULL, NULL),
+(NULL, 'Locale', 'FACEBOOK_OPEN_GRAPH_LOCALE', '', 'Optional details about the language spoken. Languages may be specified by their common English name. If omitted, the language defaults to English.', @configuration_group_id, 50, NOW(), NULL, NULL),
 (NULL, 'Currency', 'FACEBOOK_OPEN_GRAPH_CUR', '', 'Please enter your currency code such as USD', @configuration_group_id, 51, NOW(), NULL, NULL),
 (NULL, 'Lead Time', 'FACEBOOK_OPEN_GRAPH_DTS', '', 'Please enter the average days until you ship orders such as 2', @configuration_group_id, 52, NOW(), NULL, NULL),
-(NULL, 'Condition', 'FACEBOOK_OPEN_GRAPH_COND', '', 'Please enter your products condition (new, used, reconditioned)', @configuration_group_id, 53, NOW(), NULL, NULL),
+(NULL, 'Condition', 'FACEBOOK_OPEN_GRAPH_COND', '', 'Please enter your products condition (NewCondition, UsedCondition, RefurbishedCondition, DamagedCondition)', @configuration_group_id, 53, NOW(), NULL, NULL),
 (NULL, 'Payment Type 1', 'FACEBOOK_OPEN_GRAPH_PAY1', '', 'Please enter ONE of the following payment types EXACTLY (ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, PayPal, PaySwarm, AmericanExpress, DinersClub, Discover, JCB, MasterCard, VISA)', @configuration_group_id, 54, NOW(), NULL, NULL),
 (NULL, 'Payment Type 2', 'FACEBOOK_OPEN_GRAPH_PAY2', '', 'Please enter ONE of the following payment types EXACTLY (ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, PayPal, PaySwarm, AmericanExpress, DinersClub, Discover, JCB, MasterCard, VISA)', @configuration_group_id, 55, NOW(), NULL, NULL),
 (NULL, 'Payment Type 3', 'FACEBOOK_OPEN_GRAPH_PAY3', '', 'Please enter ONE of the following payment types EXACTLY (ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, PayPal, PaySwarm, AmericanExpress, DinersClub, Discover, JCB, MasterCard, VISA)', @configuration_group_id, 56, NOW(), NULL, NULL),
@@ -46,9 +46,14 @@ INSERT INTO configuration (configuration_id, configuration_title, configuration_
 (NULL, 'Payment Type 6', 'FACEBOOK_OPEN_GRAPH_PAY6', '', 'Please enter ONE of the following payment types EXACTLY (ByBankTransferInAdvance, ByInvoice, Cash, CheckInAdvance, COD, DirectDebit, PayPal, PaySwarm, AmericanExpress, DinersClub, Discover, JCB, MasterCard, VISA)', @configuration_group_id, 59, NOW(), NULL, NULL),
 (NULL, 'Tax ID', 'FACEBOOK_OPEN_GRAPH_TID', '', 'The Tax / Fiscal ID of the organization (e.g. the TIN in the US or the CIF/NIF in Spain))', @configuration_group_id, 60, NOW(), NULL, NULL),
 (NULL, 'DUNS', 'FACEBOOK_OPEN_GRAPH_DUNS', '', 'The Dun & Bradstreet DUNS number for identifying an organization or business person.', @configuration_group_id, 61, NOW(), NULL, NULL),
-(NULL, 'Fax', 'FACEBOOK_OPEN_GRAPH_FAX', '', 'Please enter your fax number like this 3308714357. Country code is NOT required.', @configuration_group_id, 62, NOW(), NULL, NULL),
+(NULL, 'Fax', 'FACEBOOK_OPEN_GRAPH_FAX', '', 'Please enter your fax number like this +1-877-453-1304.', @configuration_group_id, 62, NOW(), NULL, NULL),
 (NULL, 'VAT ID', 'FACEBOOK_OPEN_GRAPH_VAT', '', 'Value-added Tax ID of your organization.)', @configuration_group_id, 63, NOW(), NULL, NULL),
-(NULL, 'Legal Name', 'FACEBOOK_OPEN_GRAPH_LEG', '', 'The official name of the organization, e.g. the registered company name.)', @configuration_group_id, 64, NOW(), NULL, NULL);
-
+(NULL, 'Legal Name', 'FACEBOOK_OPEN_GRAPH_LEG', '', 'The official name of the organization, e.g. the registered company name.)', @configuration_group_id, 64, NOW(), NULL, NULL),
+(NULL, 'Area Served', 'FACEBOOK_OPEN_GRAPH_AREA', '', 'Optional. The geographical region served by the number, specified as a Schema.org/AdministrativeArea. Countries may be specified concisely using just their standard ISO-3166 two-letter code, as in the examples at right. If omitted, the number is assumed to be global..)', @configuration_group_id, 65, NOW(), NULL, NULL),
+(NULL, 'Twitter Page', 'FACEBOOK_OPEN_GRAPH_TWIT', '', 'Please enter your full url/link to your twitter page (https://twitter.com/prowebs)', @configuration_group_id, 66, NOW(), NULL, NULL),
+(NULL, 'Linkedin Page', 'FACEBOOK_OPEN_GRAPH_LINK', '', 'Please enter your full url/link to your Linkedin page (http://www.linkedin.com/company/pro-web-inc-/)', @configuration_group_id, 67, NOW(), NULL, NULL),
+(NULL, 'Another Profile Page', 'FACEBOOK_OPEN_GRAPH_PROF1', '', 'Please enter your full url/link to your profile page (https://www.dandb.com/businessdirectory/prowebsinc-woodbine-ga-37349028.html)', @configuration_group_id, 68, NOW(), NULL, NULL),
+(NULL, 'Another Profile Page', 'FACEBOOK_OPEN_GRAPH_PROF2', '', 'Please enter your full url/link to your profile page (http://www.yelp.com/biz/pro-webs-woodbine)', @configuration_group_id, 69, NOW(), NULL, NULL),
+(NULL, 'Shipping to', 'FACEBOOK_OPEN_GRAPH_ELER', '', 'The ISO 3166-1 (ISO 3166-1 alpha-2) or ISO 3166-2 code, or the GeoShape for the geo-political region(s) for which the offer or delivery charge specification is valid. Such as US', @configuration_group_id, 70, NOW(), NULL, NULL);
 # Register the configuration page for Admin Access Control
 INSERT IGNORE INTO admin_pages (page_key,language_key,main_page,page_params,menu_key,display_on_menu,sort_order) VALUES ('configSuperData','BOX_CONFIGURATION_SUPERDATA','FILENAME_CONFIGURATION',CONCAT('gID=',@configuration_group_id),'configuration','Y',@configuration_group_id);
