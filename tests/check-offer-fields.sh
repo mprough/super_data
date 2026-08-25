@@ -20,7 +20,7 @@ for file in "$modern" "$legacy"; do
     grep -Fq "PLUGIN_SUPERDATA_RETURNS_APPLICABLE_COUNTRY" "$file"
     grep -Fq "['refundType']" "$file"
     grep -Fq "['returnShippingFeesAmount']" "$file"
-    grep -Fq '(float)$rFeeNumeric >= 0' "$file"
+    grep -Fq '&& (float)$rFeeNumeric > 0)' "$file"
 
     test "$(grep -Fc 'array_merge($offer, $offerEnhancements)' "$file")" -eq 3
 done
