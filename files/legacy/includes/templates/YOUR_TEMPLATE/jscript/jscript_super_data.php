@@ -844,6 +844,12 @@ if (defined('PLUGIN_SUPERDATA_VALID_FROM_ENABLE') && PLUGIN_SUPERDATA_VALID_FROM
 $shippingRateMode = defined('PLUGIN_SUPERDATA_SHIPPING_RATE_MODE')
     ? PLUGIN_SUPERDATA_SHIPPING_RATE_MODE
     : 'MerchantCenter';
+$shippingRateValue = defined('PLUGIN_SUPERDATA_SHIPPING_RATE')
+    ? str_replace(',', '', trim(PLUGIN_SUPERDATA_SHIPPING_RATE))
+    : '';
+if ($shippingRateValue !== '' && !is_numeric($shippingRateValue)) {
+    $shippingRateValue = preg_replace('/^[^0-9.-]+/', '', $shippingRateValue);
+}
 
 if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
     && PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE === 'true'
@@ -883,12 +889,12 @@ if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
             'currency' => $shippingCurrency,
         ];
     } elseif ($shippingRateMode === 'FlatRate'
-        && defined('PLUGIN_SUPERDATA_SHIPPING_RATE')
-        && trim(PLUGIN_SUPERDATA_SHIPPING_RATE) !== ''
-        && is_numeric(PLUGIN_SUPERDATA_SHIPPING_RATE)) {
+        && $shippingRateValue !== ''
+        && is_numeric($shippingRateValue)
+        && (float)$shippingRateValue >= 0) {
         $offerEnhancements['shippingDetails']['shippingRate'] = [
             '@type' => 'MonetaryAmount',
-            'value' => number_format((float)PLUGIN_SUPERDATA_SHIPPING_RATE, $decimal_places, '.', ''),
+            'value' => number_format((float)$shippingRateValue, $decimal_places, '.', ''),
             'currency' => $shippingCurrency,
         ];
     }
