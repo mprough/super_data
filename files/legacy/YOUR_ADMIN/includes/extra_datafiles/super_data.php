@@ -1,4 +1,8 @@
 <?php
+
+if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== true) {
+    die('Illegal Access');
+}
 /**
  * SuperData admin menu language definition for Zen Cart 1.5.6/1.5.7.
  *

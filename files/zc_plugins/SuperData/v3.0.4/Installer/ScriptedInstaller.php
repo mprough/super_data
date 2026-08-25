@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+if (!defined('IS_ADMIN_FLAG')) {
+    die('Illegal Access');
+}
+
 /**
  * @author: torvista
  * @link: https://github.com/torvista/Zen_Cart-Structured_Data
@@ -35,7 +39,7 @@ class ScriptedInstaller extends ScriptedInstallBase
         global $template_dir;
         $this->template_dir = $template_dir;
 
-        if (!$this->purgeOldFiles()) {
+        if (!$this->checkForConflictingFiles()) {
             return false;
         }
 
@@ -285,7 +289,7 @@ class ScriptedInstaller extends ScriptedInstallBase
      */
     protected function executeUninstall(): bool
     {
-        zen_deregister_admin_pages($this->configPageKey);
+        zen_deregister_admin_pages([$this->configPageKey]);
         $this->deleteConfigurationGroup($this->configGroupTitle, true);
         return true;
     }
@@ -293,7 +297,7 @@ class ScriptedInstaller extends ScriptedInstallBase
     /**
      * @return bool
      */
-    protected function purgeOldFiles(): bool
+    protected function checkForConflictingFiles(): bool
     {
         $files_to_remove = [
             DIR_FS_ADMIN . 'includes/extra_datafiles/plugin_structured_data.php',
@@ -301,21 +305,16 @@ class ScriptedInstaller extends ScriptedInstallBase
         ];
 
         $error = false;
-        foreach ($files_to_remove as $key => $next_file) {
+        foreach ($files_to_remove as $next_file) {
             if (file_exists($next_file)) {
-                echo $next_file;
-                $result = unlink($next_file);
-                if (!$result && file_exists($next_file)) {
-                    $error = true;
-                    $this->errorContainer->addError(
-                        0,
-                        sprintf(ERROR_UNABLE_TO_DELETE_FILE, $next_file),
-                        false,
-                        // this str_replace has to do DIR_FS_ADMIN before CATALOG because catalog is contained within admin, so the results are wrong.
-                        // also, '[admin_directory]' is used to obfuscate the admin dir name, in case the user copy/pastes output to a public forum for help.
-                        sprintf(ERROR_UNABLE_TO_DELETE_FILE, str_replace([DIR_FS_ADMIN, DIR_FS_CATALOG], ['[admin_directory]/', ''], $next_file))
-                    );
-                }
+                $error = true;
+                $safe_file = str_replace([DIR_FS_ADMIN, DIR_FS_CATALOG], ['[admin_directory]/', ''], $next_file);
+                $this->errorContainer->addError(
+                    0,
+                    sprintf(ERROR_SUPERDATA_CONFLICTING_FILE, $next_file),
+                    false,
+                    sprintf(ERROR_SUPERDATA_CONFLICTING_FILE, $safe_file)
+                );
             }
         }
         return !$error;

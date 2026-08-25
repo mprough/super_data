@@ -2,6 +2,10 @@
 // DO NOT LET YOUR IDE RE-FORMAT THE CODE: it is structured so the HTML SOURCE is readable/the parentheses line up.
 declare(strict_types=1);
 
+if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== false) {
+    die('Illegal Access');
+}
+
 /**
  * This file MUST be loaded in HTML <head> since it generates meta tags.
  *

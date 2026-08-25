@@ -24,3 +24,5 @@ jobs:
         run: find files/zc_plugins -type f -name '*.php' -print0 | xargs -0 -n1 php -l
       - name: Check required Offer properties
         run: bash tests/check-offer-fields.sh
+      - name: Check Zen Cart plugin package
+        run: bash tests/check-plugin-package.sh

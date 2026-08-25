@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+if (!defined('IS_ADMIN_FLAG')) {
+    die('Illegal Access');
+}
+
 /**
  * @author: torvista
  * @link: https://github.com/torvista/Zen_Cart-Structured_Data
@@ -13,7 +17,7 @@ return [
     'pluginName' => 'SuperData',
     'pluginDescription' => 'Modern, Google-ready JSON-LD, Open Graph and social metadata for Zen Cart.',
     'pluginAuthor' => 'torvista, Zen4All, mprough, ZenExpert',
-    'pluginId' => 2215, // ID from Zen Cart forum
+    'pluginId' => 1984, // Super Data Markup ID in the Zen Cart Plugins Library
     'zcVersions' => ['v200', 'v210', 'v220'],
     'changelog' => 'https://github.com/mprough/super_data',
     'github_repo' => 'https://github.com/mprough/super_data',
