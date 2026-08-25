@@ -455,7 +455,7 @@ Before reporting a software defect:
 4. Include Zen Cart version, PHP version, template, product type, relevant settings, and the validator message.
 5. Remove passwords, tokens, private customer data, and private server paths.
 
-Submit reproducible bugs through the [SuperData issue tracker](https://github.com/mprough/super_data/issues).
+Use the [Zen Cart support thread](https://www.zen-cart.com/threads/198512) for community installation and usage support. Submit reproducible software defects through the [SuperData issue tracker](https://github.com/mprough/super_data/issues).
 
 Store-specific installation, configuration, data repair, customization, and one-on-one support are separate professional services and are not included with the source-code download.
 
