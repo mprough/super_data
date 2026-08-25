@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-version_dir='files/zc_plugins/SuperData/v3.0.4'
+version_dir='files/zc_plugins/SuperData/v3.0.5'
 
 required=(
     'README.md'
@@ -23,7 +23,7 @@ for file in "${required[@]}"; do
 done
 
 manifest="$version_dir/manifest.php"
-grep -Fq "'pluginVersion' => 'v3.0.4'" "$manifest"
+grep -Fq "'pluginVersion' => 'v3.0.5'" "$manifest"
 grep -Fq "'pluginName' => 'SuperData'" "$manifest"
 grep -Fq "'pluginId' => 1984" "$manifest"
 grep -Fq "'zcVersions' => ['v200', 'v210', 'v220']" "$manifest"
