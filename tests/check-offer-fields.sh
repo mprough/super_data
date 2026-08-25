@@ -11,6 +11,8 @@ for file in "$modern" "$legacy"; do
     grep -Fq "'@type' => 'ShippingDeliveryTime'" "$file"
     grep -Fq "\$shippingRateMode === 'Free'" "$file"
     grep -Fq "\$shippingRateMode === 'FlatRate'" "$file"
+    grep -Fq 'preg_replace' "$file"
+    grep -Fq '(float)$shippingRateValue >= 0' "$file"
     grep -Fq "'MerchantCenter'" "$file"
     grep -Fq "\$schema['image']" "$file"
     grep -Fq "PLUGIN_SUPERDATA_LOGO" "$file"
