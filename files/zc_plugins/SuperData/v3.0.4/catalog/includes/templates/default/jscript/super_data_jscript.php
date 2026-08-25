@@ -893,7 +893,7 @@ if ($applicableReturnCountry !== '' && isset($returnPolicyCategory[PLUGIN_SUPERD
         && $rType === 'ReturnShippingFees'
         && $rFeeNumeric !== ''
         && is_numeric($rFeeNumeric)
-        && (float)$rFeeNumeric >= 0) {
+        && (float)$rFeeNumeric > 0) {
         $policyData['returnShippingFeesAmount'] = [
             '@type' => 'MonetaryAmount',
             'currency' => $rCurrency,
