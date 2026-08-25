@@ -8,10 +8,6 @@ declare(strict_types=1);
  * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version auto.super_data.php torvista 27 Feb 2026
  */
-use Zencart\DbRepositories\PluginControlRepository;
-use Zencart\DbRepositories\PluginControlVersionRepository;
-use Zencart\PluginManager\PluginManager;
-
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
@@ -31,14 +27,11 @@ class zcObserverSuperData extends base
             return;
         }
 
-        // Determine this zc_plugin's installed directory
-        global $db;
-        $plugin_manager = new PluginManager(new PluginControlRepository($db), new PluginControlVersionRepository($db));
-        $this->zcPluginDir = str_replace(
-            DIR_FS_CATALOG,
-            '',
-            $plugin_manager->getPluginVersionDirectory('SuperData', $plugin_manager->getInstalledPlugins()) . 'catalog/'
-        );
+        // Resolve this installed plugin version from the observer's own path.
+        // This avoids Plugin Manager repository classes that are unavailable in
+        // some supported Zen Cart 2.0.x installations.
+        $catalogPluginDirectory = dirname(__DIR__, 3) . DIRECTORY_SEPARATOR;
+        $this->zcPluginDir = str_replace(DIRECTORY_SEPARATOR, '/', str_replace(DIR_FS_CATALOG, '', $catalogPluginDirectory));
 
         // Observers
         $this->attach(
