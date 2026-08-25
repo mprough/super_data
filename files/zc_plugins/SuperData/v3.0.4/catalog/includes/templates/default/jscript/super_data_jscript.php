@@ -845,6 +845,10 @@ if ($applicableReturnCountry !== '' && isset($returnPolicyCategory[PLUGIN_SUPERD
 
     $rType = defined('PLUGIN_SUPERDATA_RETURNS_TYPE') ? PLUGIN_SUPERDATA_RETURNS_TYPE : 'FreeReturn';
     $rFeeVal = defined('PLUGIN_SUPERDATA_RETURNS_FEE') ? PLUGIN_SUPERDATA_RETURNS_FEE : '0';
+    $rFeeNumeric = str_replace(',', '', trim($rFeeVal));
+    if ($rFeeNumeric !== '' && !is_numeric($rFeeNumeric)) {
+        $rFeeNumeric = preg_replace('/^[^0-9.-]+/', '', $rFeeNumeric);
+    }
     $rCurrency = defined('PLUGIN_SUPERDATA_PRICE_CURRENCY') ? PLUGIN_SUPERDATA_PRICE_CURRENCY : 'GBP';
 
     // Set the Schema URL for the fee type
@@ -874,21 +878,26 @@ if ($applicableReturnCountry !== '' && isset($returnPolicyCategory[PLUGIN_SUPERD
             }
         } else {
             // It is a fixed amount (e.g. "10.00")
-            $policyData['description'] = "A restocking fee of $rCurrency $rFeeVal applies.";
-            $policyData['restockingFee'] = [
-                '@type' => 'MonetaryAmount',
-                'currency' => $rCurrency,
-                'value' => number_format((float)$rFeeVal, $decimal_places, '.', '')
-            ];
+            if ($rFeeNumeric !== '' && is_numeric($rFeeNumeric) && (float)$rFeeNumeric >= 0) {
+                $policyData['description'] = "A restocking fee of $rCurrency $rFeeNumeric applies.";
+                $policyData['restockingFee'] = [
+                    '@type' => 'MonetaryAmount',
+                    'currency' => $rCurrency,
+                    'value' => number_format((float)$rFeeNumeric, $decimal_places, '.', '')
+                ];
+            }
         }
 
         // Handle "ReturnShippingFees" (Fixed shipping cost)
     } elseif (PLUGIN_SUPERDATA_RETURNS_POLICY !== 'NotPermitted'
-        && $rType === 'ReturnShippingFees' && (float)$rFeeVal > 0) {
+        && $rType === 'ReturnShippingFees'
+        && $rFeeNumeric !== ''
+        && is_numeric($rFeeNumeric)
+        && (float)$rFeeNumeric >= 0) {
         $policyData['returnShippingFeesAmount'] = [
             '@type' => 'MonetaryAmount',
             'currency' => $rCurrency,
-            'value' => number_format((float)$rFeeVal, $decimal_places, '.', '')
+            'value' => number_format((float)$rFeeNumeric, $decimal_places, '.', '')
         ];
     }
 
