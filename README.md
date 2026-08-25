@@ -209,7 +209,9 @@ SuperData adds `hasMerchantReturnPolicy` to the business and every Offer when **
 
 `FullRefund`, `StoreCreditRefund`, and `ExchangeRefund` map to their corresponding Schema.org refund types. Return Destination Country is optional and no longer controls whether the policy appears.
 
-`returnShippingFeesAmount` is published when **Returns - Type** is `ReturnShippingFees` and **Returns - Fee** contains zero or a positive amount. Enter `6.50` for $6.50. A leading currency symbol and thousands separators are tolerated, but the plain decimal value is recommended. When the customer pays no return fee, selecting `FreeReturn` is the clearest policy; if `ReturnShippingFees` is selected with a fee of `0`, SuperData publishes `0.00` instead of omitting the amount.
+Choose **ReturnFeesCustomerResponsibility** when the customer arranges and pays the carrier for return shipping. A **Returns - Fee** of `0` means the store charges no separate return or restocking fee; it does not mean return shipping is free. Google requires SuperData to omit `returnShippingFeesAmount` for this policy.
+
+Choose **ReturnShippingFees** only when the store charges the customer a known, non-zero return-shipping amount. SuperData then publishes `returnShippingFeesAmount`; enter `6.50` for $6.50. A leading currency symbol and thousands separators are tolerated, but the plain decimal value is recommended. Choose **FreeReturn** only when the customer pays nothing to return the product.
 
 ## Optional product fields
 
