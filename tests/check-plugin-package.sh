@@ -36,6 +36,13 @@ grep -Fq 'protected function executeUpgrade(' "$installer"
 grep -Fq 'protected function executeUninstall()' "$installer"
 grep -Fq 'executeInstallerSql(' "$installer"
 
+observer="$version_dir/catalog/includes/classes/observers/auto.super_data.php"
+if grep -Fq 'Zencart\\DbRepositories\\PluginControlRepository' "$observer"; then
+    echo 'Observer must not depend on PluginControlRepository; it is unavailable in supported Zen Cart 2.0.x stores.' >&2
+    exit 1
+fi
+grep -Fq 'dirname(__DIR__, 3)' "$observer"
+
 if grep -Eq '\b(unlink|rmdir)\s*\(' "$installer"; then
     echo 'Installer must not automatically delete existing store files.' >&2
     exit 1
