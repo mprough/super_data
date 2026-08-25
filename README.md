@@ -173,6 +173,8 @@ This setting does not calculate a checkout quote. It describes the shipping rule
 
 Do not enter an average, estimate, or preferred marketing amount as a flat rate. Structured data must agree with the price a shopper would actually encounter.
 
+Enter `6.50` for a $6.50 rate. SuperData also tolerates a leading currency symbol, such as `$6.50`, and removes thousands separators, but storing the plain decimal amount is recommended. The mode must still be set to `FlatRate`; entering an amount by itself does not activate flat-rate output.
+
 ### Shipping timing
 
 - **Destination country:** two-letter ISO country code.
