@@ -15,7 +15,7 @@ return [
     'pluginAuthor' => 'torvista, Zen4All, mprough, ZenExpert',
     'pluginId' => 2215, // ID from Zen Cart forum
     'zcVersions' => ['v200', 'v210', 'v220'],
-    'changelog' => 'https://github.com/mprough/Zen_Cart-Structured_Data',
-    'github_repo' => 'https://github.com/mprough/Zen_Cart-Structured_Data',
+    'changelog' => 'https://github.com/mprough/super_data',
+    'github_repo' => 'https://github.com/mprough/super_data',
     'pluginGroups' => [],
 ];
