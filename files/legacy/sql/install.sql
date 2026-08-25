@@ -1,4 +1,4 @@
-# SuperData 3.0.4 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.5 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
