@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-modern='files/zc_plugins/SuperData/v3.0.5/catalog/includes/templates/default/jscript/super_data_jscript.php'
+modern='files/zc_plugins/SuperData/v3.0.6/catalog/includes/templates/default/jscript/super_data_jscript.php'
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
@@ -21,6 +21,12 @@ for file in "$modern" "$legacy"; do
     grep -Fq "['refundType']" "$file"
     grep -Fq "['returnShippingFeesAmount']" "$file"
     grep -Fq '&& (float)$rFeeNumeric > 0)' "$file"
+    test "$(grep -Fc 'array_merge($schema, $hasMerchantReturnPolicy)' "$file")" -eq 1
+
+    if grep -Fq 'array_merge($offer, $hasMerchantReturnPolicy)' "$file"; then
+        echo "Store-wide return policy must not be duplicated under Offer in $file." >&2
+        exit 1
+    fi
 
     test "$(grep -Fc 'array_merge($offer, $offerEnhancements)' "$file")" -eq 3
 done

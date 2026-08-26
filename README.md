@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.5**
+Current version: **3.0.6**
 
 SuperData is the modern continuation of the original 09 Apr 2015 **Super Data Markup** plugin, created by [PRO-Webs](https://pro-webs.net/). Version 3 brings PRO-Webs' original work and the project's subsequent community development together in one maintained package for current and legacy Zen Cart stores.
 
@@ -29,7 +29,7 @@ SuperData supports simple products, products priced by attributes, attribute pri
 - `validFrom` on every Offer when enabled
 - `shippingDetails` with destination and delivery timing
 - Merchant Center, free-shipping, and exact flat-rate modes
-- `hasMerchantReturnPolicy` on the business and every Offer
+- store-wide `hasMerchantReturnPolicy` on the business without invalid Offer duplication
 - configurable `refundType`
 - business `image` with automatic logo fallback
 - two-decimal Offer prices
@@ -58,7 +58,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.5/
+    `-- SuperData/v3.0.6/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -71,7 +71,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.5** and select **Install**.
+5. Locate **SuperData 3.0.6** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -195,7 +195,7 @@ The same logic is applied to simple, attribute, aggregate, and POSM Offers.
 
 ## Return policy configuration
 
-SuperData adds `hasMerchantReturnPolicy` to the business and every Offer when **Returns - Applicable Country** contains at least one country code.
+SuperData adds the store-wide `hasMerchantReturnPolicy` to the business when **Returns - Applicable Country** contains at least one country code. It does not duplicate that policy under every Offer; Google's offer-level return-policy support is more limited and is intended for product-specific exceptions.
 
 | Setting | Meaning |
 | --- | --- |
@@ -303,13 +303,15 @@ Do not automatically drop optional or custom product columns. The current Reimag
 
 After removal, validate SuperData on a product containing Google category, GTIN, and MPN data. Confirm Merchant Center still receives products through the replacement feed method; SuperData JSON-LD is not a substitute for a Merchant Center product feed.
 
-## Google fields addressed in 3.0.5
+## Google fields addressed in 3.0.6
+
+Version 3.0.6 removes the store-wide return policy from individual Offers while preserving it on the business. This prevents Google from requiring offer-level fields that do not apply when the customer arranges and pays for return postage.
 
 Every supported Offer path uses the same enhancement logic. The following recommendations are addressed when their related settings are configured:
 
 - Missing field `validFrom` in `offers`
 - Missing field `shippingDetails` in `offers`
-- Missing field `hasMerchantReturnPolicy` in `offers`
+- Store-wide `hasMerchantReturnPolicy` incorrectly duplicated in `offers`
 - Missing field `refundType`
 - Missing business `image`
 
@@ -394,7 +396,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.5`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.6`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -443,7 +445,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completes the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. It also clarifies the distinction between customer-paid return postage and a merchant-charged return-shipping fee, preserves valid zero shipping rates, and packages the modern edition as a clean versioned Plugin Manager upload. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 

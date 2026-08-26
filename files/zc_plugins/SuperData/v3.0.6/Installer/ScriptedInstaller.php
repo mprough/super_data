@@ -27,7 +27,7 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     public string $pluginKey = 'SuperData';
 
-    public string $version = '3.0.5';
+    public string $version = '3.0.6';
 
 
 

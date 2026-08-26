@@ -1414,13 +1414,6 @@ if (PLUGIN_SUPERDATA_SCHEMA_ENABLE === 'true') {
 
                         $offer = array_merge($offer, $offerEnhancements);
 
-                        // Optional: merchant return policy (previously injected as raw JSON)
-                        if (!empty($hasMerchantReturnPolicy)) {
-                            // If $hasMerchantReturnPolicy is an array, merge it here.
-                            // If it's a JSON fragment, you may want to refactor it to an array first.
-                            $offer = array_merge($offer, $hasMerchantReturnPolicy);
-                        }
-
                         if (!empty($product_attribute['sku'])) {
                             $offer['sku'] = $product_attribute['sku'];
                         }
@@ -1458,11 +1451,6 @@ if (PLUGIN_SUPERDATA_SCHEMA_ENABLE === 'true') {
                     ];
 
                     $offer = array_merge($offer, $offerEnhancements);
-
-                    // Optional: merchant return policy
-                    if (!empty($hasMerchantReturnPolicy)) {
-                        $offer = array_merge($offer, $hasMerchantReturnPolicy);
-                    }
 
                     if ($attribute_lowPrice === $attribute_highPrice) {
                         $offer['@type'] = 'Offer';
@@ -1516,11 +1504,6 @@ if (PLUGIN_SUPERDATA_SCHEMA_ENABLE === 'true') {
             ];
 
             $offer = array_merge($offer, $offerEnhancements);
-
-            // Optional: merchant return policy
-            if (!empty($hasMerchantReturnPolicy)) {
-                $offer = array_merge($offer, $hasMerchantReturnPolicy);
-            }
 
             if ($backPreOrderDate !== '') {
                 $offer['availability_date'] = $backPreOrderDate;
