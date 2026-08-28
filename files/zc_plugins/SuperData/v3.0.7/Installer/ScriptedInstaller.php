@@ -29,7 +29,88 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     public string $version = '3.0.7';
 
+    /**
+     * Compatibility implementation for Zen Cart 2.0.x, which does not yet
+     * provide the getOrCreateConfigGroupId() installer helper.
+     */
+    protected function getOrCreateConfigGroupId(string $config_group_title, string $config_group_description, ?int $sort_order = 1): int
+    {
+        $config_group_title = zen_db_input($config_group_title);
+        $config_group_description = zen_db_input($config_group_description);
+        $sort_order = (int)($sort_order ?? 0);
 
+        $result = $this->dbConn->Execute(
+            "SELECT configuration_group_id
+               FROM " . TABLE_CONFIGURATION_GROUP . "
+              WHERE configuration_group_title = '$config_group_title'
+              LIMIT 1"
+        );
+        if (!$result->EOF) {
+            return (int)$result->fields['configuration_group_id'];
+        }
+
+        $this->executeInstallerSql(
+            "INSERT INTO " . TABLE_CONFIGURATION_GROUP . "
+                (configuration_group_title, configuration_group_description, sort_order, visible)
+             VALUES
+                ('$config_group_title', '$config_group_description', $sort_order, 1)"
+        );
+
+        $result = $this->dbConn->Execute(
+            "SELECT configuration_group_id
+               FROM " . TABLE_CONFIGURATION_GROUP . "
+              WHERE configuration_group_title = '$config_group_title'
+              LIMIT 1"
+        );
+        $cgi = (int)($result->fields['configuration_group_id'] ?? 0);
+
+        if ($cgi > 0 && $sort_order === 0) {
+            $this->executeInstallerSql(
+                "UPDATE " . TABLE_CONFIGURATION_GROUP . "
+                    SET sort_order = $cgi
+                  WHERE configuration_group_id = $cgi
+                  LIMIT 1"
+            );
+        }
+
+        return $cgi;
+    }
+
+    /**
+     * Compatibility implementation spanning the Zen Cart 2.0.x and 2.1+
+     * deleteConfigurationGroup() signatures.
+     */
+    public function deleteConfigurationGroup(int|string $group, bool $cascadeDeleteKeysToo = false): int
+    {
+        if (is_numeric($group)) {
+            $cgi = (int)$group;
+        } else {
+            $group_title = zen_db_input($group);
+            $result = $this->dbConn->Execute(
+                "SELECT configuration_group_id
+                   FROM " . TABLE_CONFIGURATION_GROUP . "
+                  WHERE configuration_group_title = '$group_title'
+                  LIMIT 1"
+            );
+            $cgi = (int)($result->fields['configuration_group_id'] ?? 0);
+        }
+
+        if ($cgi < 1) {
+            return 0;
+        }
+
+        if ($cascadeDeleteKeysToo) {
+            $this->executeInstallerSql(
+                "DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_group_id = $cgi"
+            );
+        }
+
+        $this->executeInstallerSql(
+            "DELETE FROM " . TABLE_CONFIGURATION_GROUP . " WHERE configuration_group_id = $cgi"
+        );
+
+        return $this->dbConn->affectedRows();
+    }
 
     /**
      * @return bool
