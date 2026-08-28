@@ -7,5 +7,5 @@ SET configuration_description = 'Add OfferShippingDetails to every product Offer
 WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE';
 
 UPDATE configuration
-SET configuration_description = '<strong>MerchantCenter:</strong> Publish shippingDetails with destination and delivery times, but omit the unknown rate and use Google Merchant Center for shipping prices.<br><strong>Free:</strong> Also publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Also publish the exact configured charge for every covered product.'
+SET configuration_description = '<strong>ZoneTable:</strong> Calculate the rate from manual tiers.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.'
 WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE';

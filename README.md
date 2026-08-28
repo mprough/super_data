@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.6**
+Current version: **3.0.7**
 
 SuperData is the modern continuation of the original 09 Apr 2015 **Super Data Markup** plugin, created by [PRO-Webs](https://pro-webs.net/). Version 3 brings PRO-Webs' original work and the project's subsequent community development together in one maintained package for current and legacy Zen Cart stores.
 
@@ -58,7 +58,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.6/
+    `-- SuperData/v3.0.7/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -71,7 +71,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.6** and select **Install**.
+5. Locate **SuperData 3.0.7** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -161,19 +161,31 @@ SuperData cannot infer the store's legal identity, shipping promises, or return 
 
 Keep **Offer shippingDetails** enabled when shipping information should appear in product Offers. SuperData publishes the destination and delivery timing with `OfferShippingDetails` and `ShippingDeliveryTime`.
 
-This setting does not calculate a checkout quote. It describes the shipping rule selected by the store owner.
+This setting does not request a checkout quote. It publishes the shipping rule configured by the store owner inside SuperData.
 
 ### Shipping rate mode
 
 | Mode | Published output | Correct use |
 | --- | --- | --- |
-| `MerchantCenter` | Destination and delivery times without an invented rate | Google Merchant Center contains the rates, or shipping varies by destination, product, weight, carrier, or order total. This is the safest default. |
+| `RateTables` | Up to five destination rate tables | Shipping varies by destination, product weight, displayed price, or number of items. |
 | `Free` | Destination, delivery times, and a `0.00` rate | Shipping is genuinely free for every product and destination represented by the rule. |
 | `FlatRate` | Destination, delivery times, and the exact configured charge | The same exact charge applies to every covered product for that destination. |
 
 Do not enter an average, estimate, or preferred marketing amount as a flat rate. Structured data must agree with the price a shopper would actually encounter.
 
 Enter `6.50` for a $6.50 rate. SuperData also tolerates a leading currency symbol, such as `$6.50`, and removes thousands separators, but storing the plain decimal amount is recommended. The mode must still be set to `FlatRate`; entering an amount by itself does not activate flat-rate output.
+
+### Shipping rate tables
+
+Each of the five rate tables independently supports three Google Merchant Center-style calculation methods:
+
+- **weight:** compares the product's shipping weight with the configured tiers.
+- **price:** compares the product's displayed offer price with the configured tiers.
+- **item:** calculates the rate for one product because the markup describes the product-page Offer, not a completed cart.
+
+Each table has its own destination country, optional state or region codes, rate type, tiers, and handling charge. Enter inclusive upper-limit:rate pairs separated by commas. For example, `1:5.95,3:7.95,5:9.95,*:12.95` charges 5.95 through 1 unit, 7.95 through 3 units, 9.95 through 5 units, and 12.95 above 5.
+
+The optional Zone Table handling charge is added after the tier is selected. Keep these manual tiers synchronized with the store's actual shipping charges. If no tier covers the product and no wildcard is present, SuperData omits `shippingRate` instead of publishing an inaccurate amount.
 
 ### Shipping timing
 
@@ -259,12 +271,6 @@ SuperData can read fields installed or populated by a feeder. It does not take o
 
 If the configured SuperData column does not exist, SuperData skips it safely. That does not mean the feeder column should be removed; it means the SuperData field name must be corrected.
 
-### Shipping when Merchant Center already has the rates
-
-Choose **Shipping rate mode: MerchantCenter** when Merchant Center or the feed contains the actual shipping prices. SuperData still publishes the destination and delivery timing in `shippingDetails`, but does not invent or duplicate a product-page rate.
-
-This setting does not change, delete, or override shipping configured in Merchant Center. It controls only the JSON-LD rendered on the storefront.
-
 ### What may need to be removed
 
 Remove or disable only code that also generates storefront structured data, Open Graph tags, or Twitter Cards. A normal Google feed generator does not conflict with SuperData merely because both use product data.
@@ -303,6 +309,10 @@ Do not automatically drop optional or custom product columns. The current Reimag
 
 After removal, validate SuperData on a product containing Google category, GTIN, and MPN data. Confirm Merchant Center still receives products through the replacement feed method; SuperData JSON-LD is not a substitute for a Merchant Center product feed.
 
+## Shipping rates addressed in 3.0.7
+
+Version 3.0.7 removes Merchant Center as an on-page shipping rate mode. SuperData now supports Free, FlatRate, and five Merchant Center-style RateTables using price, weight, or item tiers. It also displays the installed SuperData version on the configuration page.
+
 ## Google fields addressed in 3.0.6
 
 Version 3.0.6 removes the store-wide return policy from individual Offers while preserving it on the business. This prevents Google from requiring offer-level fields that do not apply when the customer arranges and pays for return postage.
@@ -315,7 +325,7 @@ Every supported Offer path uses the same enhancement logic. The following recomm
 - Missing field `refundType`
 - Missing business `image`
 
-`shippingDetails` includes the destination, handling time, transit time, and an accurate rate only when Free or FlatRate mode permits one to be stated truthfully.
+`shippingDetails` includes the destination, handling time, transit time, and the rate selected by Free, FlatRate, or RateTables mode.
 
 ## Validation checklist
 
@@ -358,12 +368,13 @@ Google describes some recommended-field warnings as non-critical. That means the
 
 Disable the previous structured-data output. Do not run SuperData and Structured Data simultaneously.
 
-### shippingDetails is missing
+### shippingDetails or shippingRate is missing
 
 - Enable **Offer shippingDetails**.
 - Install the current storefront file.
 - Clear caches and search the source for `OfferShippingDetails`.
-- Choose `MerchantCenter` when Merchant Center manages shipping rates; destination and delivery timing will still be published.
+- Configure Free, FlatRate, or a RateTables tier that covers the product.
+- For RateTables, confirm the destination, rate type, tier syntax, and optional wildcard tier.
 
 ### hasMerchantReturnPolicy is missing
 
@@ -396,7 +407,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.6`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.7`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -445,7 +456,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 

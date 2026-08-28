@@ -17,7 +17,7 @@ INSERT IGNORE INTO configuration
 VALUES
     ('Offer validFrom', 'PLUGIN_SUPERDATA_VALID_FROM_ENABLE', 'true', 'Add validFrom to every Offer. SuperData uses the future product available date when present, otherwise the product creation date.', @superdata_group_id, 131, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
     ('Offer shippingDetails', 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE', 'true', 'Enable shipping information in product Offer markup. Shipping rate mode determines whether SuperData publishes OfferShippingDetails or relies on Google Merchant Center.', @superdata_group_id, 132, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
-    ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'MerchantCenter', '<strong>MerchantCenter:</strong> Use shipping rules configured in Google Merchant Center.<br><strong>Free:</strong> Publish 0.00 only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', @superdata_group_id, 133, 'zen_cfg_select_option(array(\'MerchantCenter\', \'Free\', \'FlatRate\'),'),
+    ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'ZoneTable', '<strong>ZoneTable:</strong> Calculate the rate from manual tiers.<br><strong>Free:</strong> Publish 0.00 only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', @superdata_group_id, 133, 'zen_cfg_select_option(array(\'ZoneTable\', \'Free\', \'FlatRate\'),'),
     ('Shipping destination country', 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY', 'US', 'Two-letter ISO destination country. Used only with Free or FlatRate mode.', @superdata_group_id, 134, null),
     ('Shipping flat rate', 'PLUGIN_SUPERDATA_SHIPPING_RATE', '', 'Used only with FlatRate mode. Enter the exact charge applied to every covered product. Do not enter an average or estimate.', @superdata_group_id, 135, null),
     ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', @superdata_group_id, 136, null),
@@ -33,7 +33,7 @@ SET configuration_title = 'Business Image (Schema, optional)',
 WHERE configuration_key = 'PLUGIN_SUPERDATA_PROPERTY_IMAGE';
 
 UPDATE configuration
-SET configuration_description = 'Enable shipping information in product Offer markup. Shipping rate mode determines whether SuperData publishes OfferShippingDetails or relies on Google Merchant Center.'
+SET configuration_description = 'Enable shipping information in product Offer markup.'
 WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE';
 
 UPDATE configuration

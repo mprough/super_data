@@ -1,4 +1,4 @@
-# SuperData 3.0.5 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.7 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
@@ -19,6 +19,7 @@ SET @superdata_group_id := (
 INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.7', 'Installed SuperData version for reference.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.7\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', @superdata_group_id, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', @superdata_group_id, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', @superdata_group_id, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -77,13 +78,13 @@ INSERT IGNORE INTO configuration
 
                 ('Offer validFrom', 'PLUGIN_SUPERDATA_VALID_FROM_ENABLE', 'true', 'Add validFrom to every Offer. SuperData uses the future product available date when present, otherwise the product creation date.', @superdata_group_id, 131, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Offer shippingDetails', 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE', 'true', 'Add OfferShippingDetails to every product Offer using the destination and delivery times below. Disable only when no product shipping information should be published.', @superdata_group_id, 132, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
-                ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'MerchantCenter', '<strong>MerchantCenter:</strong> Publish shippingDetails with destination and delivery times, but omit the unknown rate and use Google Merchant Center for shipping prices.<br><strong>Free:</strong> Also publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Also publish the exact configured charge for every covered product.', @superdata_group_id, 133, 'zen_cfg_select_option(array(\'MerchantCenter\', \'Free\', \'FlatRate\'),'),
-                ('Shipping destination country', 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY', 'US', 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB. Used only with Free or FlatRate mode.', @superdata_group_id, 134, null),
-                ('Shipping flat rate', 'PLUGIN_SUPERDATA_SHIPPING_RATE', '', 'Used only with FlatRate mode. Enter the exact shipping charge applied to every product covered by this rule, for example 5.95. Do not enter an average or estimate.', @superdata_group_id, 135, null),
-                ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', @superdata_group_id, 135, null),
-                ('Shipping handling time maximum', 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS', '1', 'Maximum business days before an order ships.', @superdata_group_id, 136, null),
-                ('Shipping transit time minimum', 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS', '2', 'Minimum business days in transit.', @superdata_group_id, 137, null),
-                ('Shipping transit time maximum', 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS', '7', 'Maximum business days in transit.', @superdata_group_id, 138, null),
+                ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'RateTables', '<strong>RateTables:</strong> Calculate rates for this product from up to five destination tables.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge.', @superdata_group_id, 133, 'zen_cfg_select_option(array(\'RateTables\', \'Free\', \'FlatRate\'),'),
+                ('Shipping destination country', 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY', 'US', 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB.', @superdata_group_id, 134, null),
+                ('Shipping flat rate', 'PLUGIN_SUPERDATA_SHIPPING_RATE', '', 'Used only with FlatRate. Enter the exact shipping charge applied to every product covered by this rule, for example 5.95.', @superdata_group_id, 135, null),
+                ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', @superdata_group_id, 139, null),
+                ('Shipping handling time maximum', 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS', '1', 'Maximum business days before an order ships.', @superdata_group_id, 140, null),
+                ('Shipping transit time minimum', 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS', '2', 'Minimum business days in transit.', @superdata_group_id, 141, null),
+                ('Shipping transit time maximum', 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS', '7', 'Maximum business days in transit.', @superdata_group_id, 142, null),
 
                 ('Product Condition (Schema/OG)', 'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION', 'new', 'Choose your product\'s condition.', @superdata_group_id, 135, 'zen_cfg_select_option(array(\'new\', \'used\', \'refurbished\'),'),
 
@@ -125,6 +126,20 @@ INSERT IGNORE INTO configuration
                 ('Google - Publisher URL', 'PLUGIN_SUPERDATA_GOOGLE_PUBLISHER', '', 'Enter your Google Publisher URL/link (e.g. https://plus.google.com/+Pro-websNet/).', @superdata_group_id, 385, null),
 
                 ('Google - Default Product Category', 'PLUGIN_SUPERDATA_GOOGLE_PRODUCT_CATEGORY', '', 'Fallback/default Google product category ID (up to 6 digits).<br>Used when a product does not have a GPC defined as an custom product field (e.g. 5613 = Vehicles & Parts, Vehicle Parts & Accessories).<br><a href="https://support.google.com/merchants/answer/6324436?hl=en">Google Product Taxonomy</a>', @superdata_group_id, 390, null);
+
+INSERT IGNORE INTO configuration
+    (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
+SELECT CONCAT('Zone ', z.n, ' ', f.title), CONCAT('PLUGIN_SUPERDATA_ZONE_TABLE_', f.key_part, '_', z.n),
+       CASE WHEN f.key_part = 'METHOD' THEN 'weight' WHEN f.key_part = 'COUNTRY' AND z.n = 1 THEN 'US' WHEN f.key_part = 'HANDLING' THEN '0' ELSE '' END,
+       f.description, @superdata_group_id, 136 + ((z.n - 1) * 5) + f.offset_value, f.set_function
+FROM (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5) z
+CROSS JOIN (
+    SELECT 'rate type' title, 'METHOD' key_part, 0 offset_value, 'Choose price, weight, or item for this destination table.' description, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),' set_function
+    UNION ALL SELECT 'country', 'COUNTRY', 1, 'Two-letter destination country. Leave blank to disable this zone.', null
+    UNION ALL SELECT 'regions', 'REGIONS', 2, 'Optional comma-separated state or region codes. Leave blank for the whole country.', null
+    UNION ALL SELECT 'rates', 'RATES', 3, 'Inclusive upper-limit:rate pairs, for example 1:5.95,3:7.95,*:9.95.', null
+    UNION ALL SELECT 'handling charge', 'HANDLING', 4, 'Optional handling charge added to the selected rate.', null
+) f;
 
 # Preserve matching values from the former Structured Data plugin.
 UPDATE configuration AS new_config

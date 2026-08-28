@@ -27,7 +27,7 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     public string $pluginKey = 'SuperData';
 
-    public string $version = '3.0.6';
+    public string $version = '3.0.7';
 
 
 
@@ -52,6 +52,7 @@ class ScriptedInstaller extends ScriptedInstallBase
             "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.7', 'Installed SuperData version for reference.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.7\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', $this->cgi, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', $this->cgi, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', $this->cgi, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -110,13 +111,38 @@ class ScriptedInstaller extends ScriptedInstallBase
 
                 ('Offer validFrom', 'PLUGIN_SUPERDATA_VALID_FROM_ENABLE', 'true', 'Add validFrom to every Offer. SuperData uses the future product available date when present, otherwise the product creation date.', $this->cgi, 131, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Offer shippingDetails', 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE', 'true', 'Add OfferShippingDetails to every product Offer using the destination and delivery times below. Disable only when no product shipping information should be published.', $this->cgi, 132, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
-                ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'MerchantCenter', '<strong>MerchantCenter:</strong> Publish shippingDetails with destination and delivery times, but omit the unknown rate and use Google Merchant Center for shipping prices.<br><strong>Free:</strong> Also publish a 0.00 rate. Choose only when shipping is genuinely free.<br><strong>FlatRate:</strong> Also publish the exact configured charge for every covered product.', $this->cgi, 133, 'zen_cfg_select_option(array(\'MerchantCenter\', \'Free\', \'FlatRate\'),'),
-                ('Shipping destination country', 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY', 'US', 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB. Used only with Free or FlatRate mode.', $this->cgi, 134, null),
-                ('Shipping flat rate', 'PLUGIN_SUPERDATA_SHIPPING_RATE', '', 'Used only when Shipping rate mode is FlatRate. Enter the exact shipping charge applied to every product covered by this rule, for example 5.95. Do not enter an average or estimated amount. Leave blank for MerchantCenter or Free mode.', $this->cgi, 135, null),
-                ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', $this->cgi, 135, null),
-                ('Shipping handling time maximum', 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS', '1', 'Maximum business days before an order ships.', $this->cgi, 136, null),
-                ('Shipping transit time minimum', 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS', '2', 'Minimum business days in transit.', $this->cgi, 137, null),
-                ('Shipping transit time maximum', 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS', '7', 'Maximum business days in transit.', $this->cgi, 138, null),
+                ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'RateTables', '<strong>RateTables:</strong> Calculate rates for this product from up to five destination tables.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', $this->cgi, 133, 'zen_cfg_select_option(array(\'RateTables\', \'Free\', \'FlatRate\'),'),
+                ('Shipping destination country', 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY', 'US', 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB.', $this->cgi, 134, null),
+                ('Shipping flat rate', 'PLUGIN_SUPERDATA_SHIPPING_RATE', '', 'Used only with FlatRate. Enter the exact charge applied to every covered product, for example 5.95.', $this->cgi, 135, null),
+                ('Zone 1 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_1', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 136, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 1 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_1', 'US', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 137, null),
+                ('Zone 1 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_1', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 138, null),
+                ('Zone 1 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_1', '', 'Inclusive upper-limit:rate pairs, for example 1:5.95,3:7.95,*:9.95.', $this->cgi, 139, null),
+                ('Zone 1 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_1', '0', 'Optional handling charge added to this zone\'s selected rate.', $this->cgi, 140, null),
+                ('Zone 2 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_2', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 141, null),
+                ('Zone 2 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_2', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 142, null),
+                ('Zone 2 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_2', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 143, null),
+                ('Zone 2 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_2', '0', 'Optional handling charge.', $this->cgi, 144, null),
+                ('Zone 2 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_2', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 144, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 3 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_3', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 145, null),
+                ('Zone 3 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_3', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 146, null),
+                ('Zone 3 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_3', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 147, null),
+                ('Zone 3 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_3', '0', 'Optional handling charge.', $this->cgi, 148, null),
+                ('Zone 3 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_3', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 148, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 4 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_4', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 149, null),
+                ('Zone 4 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_4', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 150, null),
+                ('Zone 4 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_4', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 151, null),
+                ('Zone 4 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_4', '0', 'Optional handling charge.', $this->cgi, 152, null),
+                ('Zone 4 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_4', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 152, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 5 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_5', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 153, null),
+                ('Zone 5 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_5', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 154, null),
+                ('Zone 5 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_5', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 155, null),
+                ('Zone 5 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_5', '0', 'Optional handling charge.', $this->cgi, 156, null),
+                ('Zone 5 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_5', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 156, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', $this->cgi, 161, null),
+                ('Shipping handling time maximum', 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS', '1', 'Maximum business days before an order ships.', $this->cgi, 162, null),
+                ('Shipping transit time minimum', 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS', '2', 'Minimum business days in transit.', $this->cgi, 163, null),
+                ('Shipping transit time maximum', 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS', '7', 'Maximum business days in transit.', $this->cgi, 164, null),
 
                 ('Product Condition (Schema/OG)', 'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION', 'new', 'Choose your product\'s condition.', $this->cgi, 135, 'zen_cfg_select_option(array(\'new\', \'used\', \'refurbished\'),'),
 
@@ -191,7 +217,7 @@ class ScriptedInstaller extends ScriptedInstallBase
                 $this->executeInstallerSql("INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
                     (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
                     VALUES
-                    ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'MerchantCenter', '<strong>MerchantCenter:</strong> Do not publish a possibly inaccurate product-page rate; use shipping rules configured in Google Merchant Center.<br><strong>Free:</strong> Publish a 0.00 shipping rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured flat rate.', $this->cgi, 133, 'zen_cfg_select_option(array(\'MerchantCenter\', \'Free\', \'FlatRate\'),')");
+                    ('Shipping rate mode', 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE', 'ZoneTable', '<strong>ZoneTable:</strong> Calculate the rate for this product from the manual tiers.<br><strong>Free:</strong> Publish a 0.00 shipping rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured flat rate.', $this->cgi, 133, 'zen_cfg_select_option(array(\'ZoneTable\', \'Free\', \'FlatRate\'),')");
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Shipping flat rate', configuration_value = '', configuration_description = 'Used only when Shipping rate mode is FlatRate. Enter the exact shipping charge applied to every covered product. Do not enter an average or estimated amount.', sort_order = 135 WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE'");
                 break;
 
@@ -274,13 +300,35 @@ class ScriptedInstaller extends ScriptedInstallBase
         $this->executeInstallerSql("INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
             (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
             VALUES
+            ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.7', 'Installed SuperData version for reference.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.7\'),'),
             ('Returns - Refund Type', 'PLUGIN_SUPERDATA_RETURNS_REFUND_TYPE', 'FullRefund', 'Refund provided for an accepted return. Choose FullRefund for a full monetary refund, StoreCreditRefund for store credit, or ExchangeRefund when the item is exchanged for the same product. Ignored when returns are not permitted.', $this->cgi, 268, 'zen_cfg_select_option(array(\'FullRefund\', \'StoreCreditRefund\', \'ExchangeRefund\'),')");
+        for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
+            $zoneDefaultCountry = $zoneNumber === 1 ? 'US' : '';
+            $zoneSort = 136 + (($zoneNumber - 1) * 5);
+            $this->executeInstallerSql("INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
+                (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
+                VALUES
+                ('Zone $zoneNumber rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_$zoneNumber', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, $zoneSort, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone $zoneNumber country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_$zoneNumber', '$zoneDefaultCountry', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, " . ($zoneSort + 1) . ", null),
+                ('Zone $zoneNumber regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_$zoneNumber', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, " . ($zoneSort + 2) . ", null),
+                ('Zone $zoneNumber rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_$zoneNumber', '', 'Inclusive upper-limit:rate pairs, for example 1:5.95,3:7.95,*:9.95.', $this->cgi, " . ($zoneSort + 3) . ", null),
+                ('Zone $zoneNumber handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_$zoneNumber', '0', 'Optional handling charge added to the selected rate.', $this->cgi, " . ($zoneSort + 4) . ", null)");
+        }
+        $this->executeInstallerSql("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_key IN ('PLUGIN_SUPERDATA_ZONE_TABLE_METHOD', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING')");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '3.0.7', set_function = 'zen_cfg_select_option(array(\'3.0.7\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = 'RateTables' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' AND configuration_value IN ('MerchantCenter', 'ZoneTable')");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>RateTables:</strong> Calculate rates for this product from up to five destination tables.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', set_function = 'zen_cfg_select_option(array(\'RateTables\', \'Free\', \'FlatRate\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB.' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Used only with FlatRate. Enter the exact charge applied to every covered product, for example 5.95.' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 161 WHERE configuration_key = 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 162 WHERE configuration_key = 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 163 WHERE configuration_key = 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 164 WHERE configuration_key = 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Business Image (Schema, optional)', configuration_description = 'Image for Organization, OnlineBusiness, OnlineStore, or LocalBusiness markup. Enter one complete image URL or multiple URLs separated by commas. If blank, SuperData uses the configured Logo so the Schema image field is not missing.' WHERE configuration_key = 'PLUGIN_SUPERDATA_PROPERTY_IMAGE'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>Required to publish hasMerchantReturnPolicy.</strong> Enter the two-letter ISO country code where this policy applies, for example US. Separate multiple countries with commas.' WHERE configuration_key = 'PLUGIN_SUPERDATA_RETURNS_APPLICABLE_COUNTRY'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Returns - Return Destination Country', configuration_description = 'Optional two-letter ISO country code where returned products must be sent. This no longer controls whether the return policy is published.' WHERE configuration_key = 'PLUGIN_SUPERDATA_RETURNS_POLICY_COUNTRY'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Organization Type' WHERE configuration_key = 'PLUGIN_SUPERDATA_ORGANIZATION_TYPE'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Add OfferShippingDetails to every product Offer using the configured destination and delivery times. Disable only when no product shipping information should be published.' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE'");
-        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>MerchantCenter:</strong> Publish shippingDetails with destination and delivery times, but omit the unknown rate and use Google Merchant Center for shipping prices.<br><strong>Free:</strong> Also publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Also publish the exact configured charge for every covered product.' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE'");
         return true;
     }
 

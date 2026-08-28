@@ -12,4 +12,4 @@ if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== true) {
  * @license https://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version super_data_menu_name.php torvista 08 Feb 2025
  */
-define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData');
+define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.7');

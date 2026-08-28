@@ -69,7 +69,7 @@ $superDataLegacyDefaults = [
     'PLUGIN_SUPERDATA_DELIVERYLEADTIME_OOS' => '7',
     'PLUGIN_SUPERDATA_VALID_FROM_ENABLE' => 'true',
     'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' => 'MerchantCenter',
+    'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' => 'RateTables',
     'PLUGIN_SUPERDATA_SHIPPING_COUNTRY' => 'US',
     'PLUGIN_SUPERDATA_SHIPPING_RATE' => '',
     'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS' => '0',
@@ -278,6 +278,50 @@ function sdata_clean_schema($value) {
         });
     }
     return $value;
+}
+
+/**
+ * Calculate one product's shipping charge from a Merchant Center-style rate table.
+ * Each pair is an inclusive upper limit and rate (1:5.95,3:7.95). An optional
+ * wildcard pair (*:12.95) covers values above the highest numeric tier.
+ *
+ * @return float|null
+ */
+function sdata_zone_table_rate(float $basis, string $table, $handling = 0) {
+    $tiers = [];
+    $fallback = null;
+
+    foreach (explode(',', $table) as $pair) {
+        $parts = array_map('trim', explode(':', $pair, 2));
+        if (count($parts) !== 2 || !is_numeric($parts[1]) || (float)$parts[1] < 0) {
+            continue;
+        }
+        if ($parts[0] === '*') {
+            $fallback = (float)$parts[1];
+        } elseif (is_numeric($parts[0]) && (float)$parts[0] >= 0) {
+            $tiers[(string)(float)$parts[0]] = (float)$parts[1];
+        }
+    }
+
+    if ($tiers !== []) {
+        uksort($tiers, static function ($a, $b) {
+            return (float)$a <=> (float)$b;
+        });
+    }
+
+    $rate = $fallback;
+    foreach ($tiers as $limit => $tierRate) {
+        if ($basis <= (float)$limit) {
+            $rate = $tierRate;
+            break;
+        }
+    }
+    if ($rate === null) {
+        return null;
+    }
+
+    $handlingCharge = is_numeric($handling) ? max(0.0, (float)$handling) : 0.0;
+    return $rate + $handlingCharge;
 }
 
 /**
@@ -843,7 +887,7 @@ if (defined('PLUGIN_SUPERDATA_VALID_FROM_ENABLE') && PLUGIN_SUPERDATA_VALID_FROM
 
 $shippingRateMode = defined('PLUGIN_SUPERDATA_SHIPPING_RATE_MODE')
     ? PLUGIN_SUPERDATA_SHIPPING_RATE_MODE
-    : 'MerchantCenter';
+    : 'RateTables';
 $shippingRateValue = defined('PLUGIN_SUPERDATA_SHIPPING_RATE')
     ? str_replace(',', '', trim(PLUGIN_SUPERDATA_SHIPPING_RATE))
     : '';
@@ -900,14 +944,65 @@ if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
     }
 }
 
+// RateTables publishes one OfferShippingDetails entry for each configured destination table.
+if ($shippingRateMode === 'RateTables'
+    && defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
+    && PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE === 'true') {
+    $shippingCurrency = defined('PLUGIN_SUPERDATA_PRICE_CURRENCY') && PLUGIN_SUPERDATA_PRICE_CURRENCY !== ''
+        ? PLUGIN_SUPERDATA_PRICE_CURRENCY
+        : DEFAULT_CURRENCY;
+    $shippingDeliveryTime = [
+        '@type' => 'ShippingDeliveryTime',
+        'handlingTime' => ['@type' => 'QuantitativeValue', 'minValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MIN_DAYS), 'maxValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MAX_DAYS), 'unitCode' => 'DAY'],
+        'transitTime' => ['@type' => 'QuantitativeValue', 'minValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS), 'maxValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS), 'unitCode' => 'DAY'],
+    ];
+    $rateTableDetails = [];
+    for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
+        $countryKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_' . $zoneNumber;
+        $regionsKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_' . $zoneNumber;
+        $methodKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_' . $zoneNumber;
+        $ratesKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_' . $zoneNumber;
+        $handlingKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_' . $zoneNumber;
+        $zoneCountry = defined($countryKey) ? strtoupper(trim((string)constant($countryKey))) : '';
+        $zoneRates = defined($ratesKey) ? trim((string)constant($ratesKey)) : '';
+        if ($zoneCountry === '' || $zoneRates === '') {
+            continue;
+        }
+        $zoneMethod = defined($methodKey) ? constant($methodKey) : 'weight';
+        $zoneBasis = $zoneMethod === 'price' ? (float)$product_base_displayed_price : ($zoneMethod === 'item' ? 1.0 : (float)$weight);
+        $zoneRate = sdata_zone_table_rate($zoneBasis, $zoneRates, defined($handlingKey) ? constant($handlingKey) : 0);
+        if ($zoneRate === null) {
+            continue;
+        }
+        $destination = ['@type' => 'DefinedRegion', 'addressCountry' => $zoneCountry];
+        $zoneRegions = defined($regionsKey) ? trim((string)constant($regionsKey)) : '';
+        if ($zoneRegions !== '') {
+            $destination['addressRegion'] = array_values(array_filter(array_map('trim', explode(',', $zoneRegions))));
+        }
+        $rateTableDetails[] = [
+            '@type' => 'OfferShippingDetails',
+            'shippingDestination' => $destination,
+            'deliveryTime' => $shippingDeliveryTime,
+            'shippingRate' => ['@type' => 'MonetaryAmount', 'value' => number_format($zoneRate, $decimal_places, '.', ''), 'currency' => $shippingCurrency],
+        ];
+    }
+    if ($rateTableDetails !== []) {
+        $offerEnhancements['shippingDetails'] = $rateTableDetails;
+    } else {
+        unset($offerEnhancements['shippingDetails']);
+    }
+}
+
 // Merchant Return Policy
 //common code block used in attribute-handling option and simple product
 $hasMerchantReturnPolicy = [];
 
 $applicableReturnCountry = trim(PLUGIN_SUPERDATA_RETURNS_APPLICABLE_COUNTRY);
 if ($applicableReturnCountry !== '' && isset($returnPolicyCategory[PLUGIN_SUPERDATA_RETURNS_POLICY])) {
+    $merchantReturnPolicyId = rtrim(HTTP_SERVER, '/') . '/#merchant-return-policy';
     $policyData = [
         '@type' => 'MerchantReturnPolicy',
+        '@id' => $merchantReturnPolicyId,
         'applicableCountry' => strpos($applicableReturnCountry, ',') !== false
             ? array_map('trim', explode(',', $applicableReturnCountry))
             : $applicableReturnCountry,
@@ -994,6 +1089,9 @@ if ($applicableReturnCountry !== '' && isset($returnPolicyCategory[PLUGIN_SUPERD
 
     $hasMerchantReturnPolicy = [
         'hasMerchantReturnPolicy' => $policyData
+    ];
+    $offerEnhancements['hasMerchantReturnPolicy'] = [
+        '@id' => $merchantReturnPolicyId,
     ];
 }
 ?>
