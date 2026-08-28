@@ -290,6 +290,8 @@ if (PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE !== '') {
 
 // Determine page type
 $page_type = '';
+$product_date_added = null;
+$product_date_available = null;
 global $current_category_has_products, $current_category_has_subcats, $current_category_id, $listing_sql;
 
 if (substr($current_page_base, -5) === '_info'
