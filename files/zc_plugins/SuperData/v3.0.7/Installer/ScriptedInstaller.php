@@ -80,7 +80,7 @@ class ScriptedInstaller extends ScriptedInstallBase
      * Compatibility implementation spanning the Zen Cart 2.0.x and 2.1+
      * deleteConfigurationGroup() signatures.
      */
-    public function deleteConfigurationGroup(int|string $group, bool $cascadeDeleteKeysToo = false): int
+    public function deleteConfigurationGroup($group, bool $cascadeDeleteKeysToo = false): int
     {
         if (is_numeric($group)) {
             $cgi = (int)$group;
