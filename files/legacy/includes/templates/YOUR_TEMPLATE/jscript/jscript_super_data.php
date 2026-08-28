@@ -878,6 +878,7 @@ if ($page_type === 'product') {
 $offerEnhancements = [];
 
 if ($page_type === 'product'
+    && isset($product_date_added)
     && defined('PLUGIN_SUPERDATA_VALID_FROM_ENABLE')
     && PLUGIN_SUPERDATA_VALID_FROM_ENABLE === 'true') {
     $validFromSource = !empty($product_date_available) && strtotime($product_date_available) > time()
