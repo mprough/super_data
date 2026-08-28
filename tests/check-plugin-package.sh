@@ -26,6 +26,7 @@ done
 manifest="$version_dir/manifest.php"
 grep -Fq "'pluginVersion' => 'v3.0.7'" "$manifest"
 grep -Fq "'pluginName' => 'SuperData'" "$manifest"
+grep -Fq "'pluginAuthor' => 'PRO-Webs.net, torvista, Zen4All, ZenExpert'" "$manifest"
 grep -Fq "'pluginId' => 1984" "$manifest"
 grep -Fq "'zcVersions' => ['v200', 'v210', 'v220']" "$manifest"
 grep -Fq "'github_repo' => 'https://github.com/mprough/super_data'" "$manifest"
