@@ -6,6 +6,7 @@ legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data
 
 for file in "$modern" "$legacy"; do
     grep -Fq "['validFrom']" "$file"
+    grep -Fq "if (\$page_type === 'product'" "$file"
     grep -Fq "['shippingDetails']" "$file"
     grep -Fq "'@type' => 'OfferShippingDetails'" "$file"
     grep -Fq "'@type' => 'ShippingDeliveryTime'" "$file"

@@ -877,7 +877,9 @@ if ($page_type === 'product') {
 // simple, attribute and aggregate offer so no product path silently omits them.
 $offerEnhancements = [];
 
-if (defined('PLUGIN_SUPERDATA_VALID_FROM_ENABLE') && PLUGIN_SUPERDATA_VALID_FROM_ENABLE === 'true') {
+if ($page_type === 'product'
+    && defined('PLUGIN_SUPERDATA_VALID_FROM_ENABLE')
+    && PLUGIN_SUPERDATA_VALID_FROM_ENABLE === 'true') {
     $validFromSource = !empty($product_date_available) && strtotime($product_date_available) > time()
         ? $product_date_available
         : $product_date_added;
