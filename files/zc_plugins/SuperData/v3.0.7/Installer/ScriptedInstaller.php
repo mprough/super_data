@@ -206,11 +206,15 @@ class ScriptedInstaller extends ScriptedInstallBase
     }
 
     /**
-     * @param $oldVersion
+     * Zen Cart 2.0.x invokes this method without an argument, while Zen Cart
+     * 2.1.0 and later supply the previously installed plugin version.
+     *
+     * @param mixed ...$args
      * @return bool
      */
-    protected function executeUpgrade($oldVersion): bool
+    protected function executeUpgrade(...$args): bool
     {
+        $oldVersion = (string)($args[0] ?? (defined('PLUGIN_SUPERDATA_VERSION') ? 'v' . ltrim((string)PLUGIN_SUPERDATA_VERSION, 'v') : ''));
         $this->cgi = $this->getOrCreateConfigGroupId($this->configGroupTitle, $this->configGroupTitle, null);
         switch ($oldVersion) {
             case "v3.0.0":
