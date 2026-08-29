@@ -690,7 +690,7 @@ if (PLUGIN_SUPERDATA_SAMEAS !== '') {
 }
 
 // Add individual social URLs
-foreach ([PLUGIN_SUPERDATA_FOG_PAGE, PLUGIN_SUPERDATA_TWITTER_PAGE, PLUGIN_SUPERDATA_GOOGLE_PUBLISHER] as $url) {
+foreach ([PLUGIN_SUPERDATA_FOG_PAGE, PLUGIN_SUPERDATA_TWITTER_PAGE] as $url) {
     if (!empty($url)) {
         $sameAs[] = trim($url, " \t\n\r\0\x0B\"'");
     }
@@ -1755,11 +1755,3 @@ $image = ($image_default ? $image_default_twitter : $image);
 <?php
 } //end of Twitter enabled
 ?>
-<?php //google+ markup
-if (PLUGIN_SUPERDATA_GOOGLE_PUBLISHER !== '') {
-?>
-    <!-- Google+-->
-    <link href="<?= PLUGIN_SUPERDATA_GOOGLE_PUBLISHER ?>" rel="publisher">
-    <!-- eof Google+-->
-<?php
-} //eof Google+

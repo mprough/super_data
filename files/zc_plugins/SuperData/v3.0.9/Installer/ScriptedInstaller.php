@@ -27,7 +27,7 @@ class ScriptedInstaller extends ScriptedInstallBase
 
     public string $pluginKey = 'SuperData';
 
-    public string $version = '3.0.8';
+    public string $version = '3.0.9';
 
     /**
      * Compatibility implementation for Zen Cart 2.0.x, which does not yet
@@ -133,7 +133,7 @@ class ScriptedInstaller extends ScriptedInstallBase
             "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.9', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.9\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', $this->cgi, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', $this->cgi, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', $this->cgi, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -200,37 +200,37 @@ class ScriptedInstaller extends ScriptedInstallBase
                 ('Zone 1 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_1', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 138, null),
                 ('Zone 1 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_1', '', 'Inclusive upper-limit:rate pairs, for example 1:5.95,3:7.95,*:9.95.', $this->cgi, 139, null),
                 ('Zone 1 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_1', '0', 'Optional handling charge added to this zone\'s selected rate.', $this->cgi, 140, null),
-                ('Zone 2 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_2', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 141, null),
-                ('Zone 2 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_2', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 142, null),
-                ('Zone 2 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_2', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 143, null),
-                ('Zone 2 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_2', '0', 'Optional handling charge.', $this->cgi, 144, null),
-                ('Zone 2 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_2', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 144, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
-                ('Zone 3 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_3', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 145, null),
-                ('Zone 3 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_3', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 146, null),
-                ('Zone 3 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_3', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 147, null),
-                ('Zone 3 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_3', '0', 'Optional handling charge.', $this->cgi, 148, null),
-                ('Zone 3 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_3', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 148, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
-                ('Zone 4 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_4', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 149, null),
-                ('Zone 4 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_4', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 150, null),
-                ('Zone 4 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_4', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 151, null),
-                ('Zone 4 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_4', '0', 'Optional handling charge.', $this->cgi, 152, null),
-                ('Zone 4 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_4', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 152, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
-                ('Zone 5 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_5', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 153, null),
-                ('Zone 5 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_5', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 154, null),
-                ('Zone 5 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_5', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 155, null),
-                ('Zone 5 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_5', '0', 'Optional handling charge.', $this->cgi, 156, null),
+                ('Zone 2 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_2', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 141, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 2 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_2', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 142, null),
+                ('Zone 2 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_2', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 143, null),
+                ('Zone 2 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_2', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 144, null),
+                ('Zone 2 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_2', '0', 'Optional handling charge.', $this->cgi, 145, null),
+                ('Zone 3 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_3', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 146, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 3 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_3', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 147, null),
+                ('Zone 3 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_3', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 148, null),
+                ('Zone 3 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_3', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 149, null),
+                ('Zone 3 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_3', '0', 'Optional handling charge.', $this->cgi, 150, null),
+                ('Zone 4 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_4', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 151, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 4 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_4', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 152, null),
+                ('Zone 4 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_4', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 153, null),
+                ('Zone 4 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_4', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 154, null),
+                ('Zone 4 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_4', '0', 'Optional handling charge.', $this->cgi, 155, null),
                 ('Zone 5 rate type', 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_5', 'weight', 'Choose price, weight, or item for this destination table.', $this->cgi, 156, 'zen_cfg_select_option(array(\'price\', \'weight\', \'item\'),'),
+                ('Zone 5 country', 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_5', '', 'Two-letter destination country. Leave blank to disable this zone.', $this->cgi, 157, null),
+                ('Zone 5 regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_5', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, 158, null),
+                ('Zone 5 rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_5', '', 'Inclusive upper-limit:rate pairs.', $this->cgi, 159, null),
+                ('Zone 5 handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_5', '0', 'Optional handling charge.', $this->cgi, 160, null),
                 ('Shipping handling time minimum', 'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS', '0', 'Minimum business days before an order ships.', $this->cgi, 161, null),
                 ('Shipping handling time maximum', 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS', '1', 'Maximum business days before an order ships.', $this->cgi, 162, null),
                 ('Shipping transit time minimum', 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS', '2', 'Minimum business days in transit.', $this->cgi, 163, null),
                 ('Shipping transit time maximum', 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS', '7', 'Maximum business days in transit.', $this->cgi, 164, null),
 
-                ('Product Condition (Schema/OG)', 'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION', 'new', 'Choose your product\'s condition.', $this->cgi, 135, 'zen_cfg_select_option(array(\'new\', \'used\', \'refurbished\'),'),
+                ('Product Condition (Schema/OG)', 'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION', 'new', 'Choose your product\'s condition.', $this->cgi, 165, 'zen_cfg_select_option(array(\'new\', \'used\', \'refurbished\'),'),
 
-                ('Default Product Weight', 'PLUGIN_SUPERDATA_DEFAULT_WEIGHT', '0.5', 'If product has no weight defined, use this value.', $this->cgi, 140, null),
+                ('Default Product Weight', 'PLUGIN_SUPERDATA_DEFAULT_WEIGHT', '0.5', 'If product has no weight defined, use this value.', $this->cgi, 166, null),
 
-                ('Out of Stock Status', 'PLUGIN_SUPERDATA_OOS_DEFAULT', 'BackOrder', 'The default OOS status if a product is out of stock and has no custom field defined for OOS status.', $this->cgi, 145, 'zen_cfg_select_option(array(\'BackOrder\', \'Discontinued\', \'OutOfStock\', \'PreOrder\', \'PreSale\', \'SoldOut\'),'),
-                ('Out of Stock - BackOrder/PreOrder Date', 'PLUGIN_SUPERDATA_OOS_AVAILABILITY_DELAY', '10', 'The OOS BackOrder/PreSales conditions require an availability date.<br>Set the number of days to add to today\'s date, to create a new date.', $this->cgi, 150, null),
+                ('Out of Stock Status', 'PLUGIN_SUPERDATA_OOS_DEFAULT', 'BackOrder', 'The default OOS status if a product is out of stock and has no custom field defined for OOS status.', $this->cgi, 167, 'zen_cfg_select_option(array(\'BackOrder\', \'Discontinued\', \'OutOfStock\', \'PreOrder\', \'PreSale\', \'SoldOut\'),'),
+                ('Out of Stock - BackOrder/PreOrder Date', 'PLUGIN_SUPERDATA_OOS_AVAILABILITY_DELAY', '10', 'The OOS BackOrder/PreSales conditions require an availability date.<br>Set the number of days to add to today\'s date, to create a new date.', $this->cgi, 168, null),
 
                 ('Limit - Product Name', 'PLUGIN_SUPERDATA_MAX_NAME', '150', 'The maximum number of characters allowed in a product name.<br>Google permits up to 150.', $this->cgi, 170, null),
                 ('Limit - Product Description', 'PLUGIN_SUPERDATA_MAX_DESCRIPTION', '5000', 'The maximum number of characters allowed in a product description.<br>Google permits up to 5000.', $this->cgi, 175, null),
@@ -262,7 +262,6 @@ class ScriptedInstaller extends ScriptedInstallBase
                 ('Twitter Default Image (optional)', 'PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE', '', 'Fallback image used in Twitter when there is no image defined. Enter the full URL.', $this->cgi, 370, null),
                 ('Twitter Username', 'PLUGIN_SUPERDATA_TWITTER_USERNAME', '', 'Enter your Twitter username (e.g.: @zencart).', $this->cgi, 375, null),
                 ('Twitter Page URL', 'PLUGIN_SUPERDATA_TWITTER_PAGE', '', 'Enter the full URL to your Twitter page (e.g.: https://twitter.com/zencart)', $this->cgi, 380, null),
-                ('Google - Publisher URL', 'PLUGIN_SUPERDATA_GOOGLE_PUBLISHER', '', 'Enter your Google Publisher URL/link (e.g. https://plus.google.com/+Pro-websNet/).', $this->cgi, 385, null),
 
                 ('Google - Default Product Category', 'PLUGIN_SUPERDATA_GOOGLE_PRODUCT_CATEGORY', '', 'Fallback/default Google product category ID (up to 6 digits).<br>Used when a product does not have a GPC defined as an custom product field (e.g. 5613 = Vehicles & Parts, Vehicle Parts & Accessories).<br><a href=\"https://support.google.com/merchants/answer/6324436?hl=en\">Google Product Taxonomy</a>', $this->cgi, 390, null)
                 ");
@@ -375,7 +374,6 @@ class ScriptedInstaller extends ScriptedInstallBase
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 370 WHERE configuration_key = 'PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE'");
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 375 WHERE configuration_key = 'PLUGIN_SUPERDATA_TWITTER_USERNAME'");
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 380 WHERE configuration_key = 'PLUGIN_SUPERDATA_TWITTER_PAGE'");
-                $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 385 WHERE configuration_key = 'PLUGIN_SUPERDATA_GOOGLE_PUBLISHER'");
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 390 WHERE configuration_key = 'PLUGIN_SUPERDATA_GOOGLE_PRODUCT_CATEGORY'");
                 // Update Sort order and description
                 $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'The charge to the customer for returning the product. You can enter a fixed amount or percentage. If you add percentage, the value will be calculated as percentage of the item price.', sort_order = 270 WHERE configuration_key = 'PLUGIN_SUPERDATA_RETURNS_FEE'");
@@ -385,7 +383,7 @@ class ScriptedInstaller extends ScriptedInstallBase
         $this->executeInstallerSql("INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
             (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
             VALUES
-            ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
+            ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.9', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.9\'),'),
             ('Returns - Refund Type', 'PLUGIN_SUPERDATA_RETURNS_REFUND_TYPE', 'FullRefund', 'Refund provided for an accepted return. Choose FullRefund for a full monetary refund, StoreCreditRefund for store credit, or ExchangeRefund when the item is exchanged for the same product. Ignored when returns are not permitted.', $this->cgi, 268, 'zen_cfg_select_option(array(\'FullRefund\', \'StoreCreditRefund\', \'ExchangeRefund\'),')");
         for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
             $zoneDefaultCountry = $zoneNumber === 1 ? 'US' : '';
@@ -398,9 +396,15 @@ class ScriptedInstaller extends ScriptedInstallBase
                 ('Zone $zoneNumber regions', 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_$zoneNumber', '', 'Optional comma-separated state or region codes. Leave blank for the whole country.', $this->cgi, " . ($zoneSort + 2) . ", null),
                 ('Zone $zoneNumber rates', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_$zoneNumber', '', 'Inclusive upper-limit:rate pairs, for example 1:5.95,3:7.95,*:9.95.', $this->cgi, " . ($zoneSort + 3) . ", null),
                 ('Zone $zoneNumber handling charge', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_$zoneNumber', '0', 'Optional handling charge added to the selected rate.', $this->cgi, " . ($zoneSort + 4) . ", null)");
+            $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = $zoneSort WHERE configuration_key = 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_$zoneNumber'");
+            $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = " . ($zoneSort + 1) . " WHERE configuration_key = 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_$zoneNumber'");
+            $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = " . ($zoneSort + 2) . " WHERE configuration_key = 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_$zoneNumber'");
+            $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = " . ($zoneSort + 3) . " WHERE configuration_key = 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_$zoneNumber'");
+            $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = " . ($zoneSort + 4) . " WHERE configuration_key = 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_$zoneNumber'");
         }
         $this->executeInstallerSql("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_key IN ('PLUGIN_SUPERDATA_ZONE_TABLE_METHOD', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING')");
-        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '3.0.8', set_function = 'zen_cfg_select_option(array(\'3.0.8\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
+        $this->executeInstallerSql("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_key = 'PLUGIN_SUPERDATA_GOOGLE_PUBLISHER'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '3.0.9', set_function = 'zen_cfg_select_option(array(\'3.0.9\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = 'RateTables' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' AND configuration_value IN ('MerchantCenter', 'ZoneTable')");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>RateTables:</strong> Calculate rates for this product from up to five destination tables.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', set_function = 'zen_cfg_select_option(array(\'RateTables\', \'Free\', \'FlatRate\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE'");
@@ -410,6 +414,10 @@ class ScriptedInstaller extends ScriptedInstallBase
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 162 WHERE configuration_key = 'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 163 WHERE configuration_key = 'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 164 WHERE configuration_key = 'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 165 WHERE configuration_key = 'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 166 WHERE configuration_key = 'PLUGIN_SUPERDATA_DEFAULT_WEIGHT'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 167 WHERE configuration_key = 'PLUGIN_SUPERDATA_OOS_DEFAULT'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET sort_order = 168 WHERE configuration_key = 'PLUGIN_SUPERDATA_OOS_AVAILABILITY_DELAY'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Business Image (Schema, optional)', configuration_description = 'Image for Organization, OnlineBusiness, OnlineStore, or LocalBusiness markup. Enter one complete image URL or multiple URLs separated by commas. If blank, SuperData uses the configured Logo so the Schema image field is not missing.' WHERE configuration_key = 'PLUGIN_SUPERDATA_PROPERTY_IMAGE'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>Required to publish hasMerchantReturnPolicy.</strong> Enter the two-letter ISO country code where this policy applies, for example US. Separate multiple countries with commas.' WHERE configuration_key = 'PLUGIN_SUPERDATA_RETURNS_APPLICABLE_COUNTRY'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_title = 'Returns - Return Destination Country', configuration_description = 'Optional two-letter ISO country code where returned products must be sent. This no longer controls whether the return policy is published.' WHERE configuration_key = 'PLUGIN_SUPERDATA_RETURNS_POLICY_COUNTRY'");

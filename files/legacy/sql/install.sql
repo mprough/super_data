@@ -1,4 +1,4 @@
-# SuperData 3.0.8 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.9 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
@@ -19,7 +19,7 @@ SET @superdata_group_id := (
 INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.9', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.9\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', @superdata_group_id, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', @superdata_group_id, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', @superdata_group_id, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -123,7 +123,6 @@ INSERT IGNORE INTO configuration
                 ('Twitter Default Image (optional)', 'PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE', '', 'Fallback image used in Twitter when there is no image defined. Enter the full URL.', @superdata_group_id, 370, null),
                 ('Twitter Username', 'PLUGIN_SUPERDATA_TWITTER_USERNAME', '', 'Enter your Twitter username (e.g.: @zencart).', @superdata_group_id, 375, null),
                 ('Twitter Page URL', 'PLUGIN_SUPERDATA_TWITTER_PAGE', '', 'Enter the full URL to your Twitter page (e.g.: https://twitter.com/zencart)', @superdata_group_id, 380, null),
-                ('Google - Publisher URL', 'PLUGIN_SUPERDATA_GOOGLE_PUBLISHER', '', 'Enter your Google Publisher URL/link (e.g. https://plus.google.com/+Pro-websNet/).', @superdata_group_id, 385, null),
 
                 ('Google - Default Product Category', 'PLUGIN_SUPERDATA_GOOGLE_PRODUCT_CATEGORY', '', 'Fallback/default Google product category ID (up to 6 digits).<br>Used when a product does not have a GPC defined as an custom product field (e.g. 5613 = Vehicles & Parts, Vehicle Parts & Accessories).<br><a href="https://support.google.com/merchants/answer/6324436?hl=en">Google Product Taxonomy</a>', @superdata_group_id, 390, null);
 
