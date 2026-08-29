@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.9**
+Current version: **3.0.10**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.9/
+    `-- SuperData/v3.0.10/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.9** and select **Install**.
+5. Locate **SuperData 3.0.10** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -311,6 +311,10 @@ Do not automatically drop optional or custom product columns. The current Reimag
 
 After removal, validate SuperData on a product containing Google category, GTIN, and MPN data. Confirm Merchant Center still receives products through the replacement feed method; SuperData JSON-LD is not a substitute for a Merchant Center product feed.
 
+## Always Free Shipping addressed in 3.0.10
+
+Version 3.0.10 recognizes Zen Cart's per-product Always Free Shipping flag. Applicable shipping destinations and delivery timing remain published, while each configured destination receives an exact `0.00` shipping rate instead of a rate-table or flat-rate charge.
+
 ## Configuration layout addressed in 3.0.9
 
 Version 3.0.9 corrects overlapping configuration sort orders so all five shipping zones remain together and each zone consistently displays rate type, country, regions, rates, and handling charge. Product condition, default weight, and out-of-stock settings now follow the complete shipping section.
@@ -419,7 +423,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.9`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.10`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`

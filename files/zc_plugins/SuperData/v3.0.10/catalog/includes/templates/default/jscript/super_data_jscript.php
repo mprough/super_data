@@ -263,6 +263,7 @@ $product_base_displayed_price = '';
 $product_base_mpn = '';
 $product_base_sku = '';
 $product_base_stock = 0;
+$product_always_free_shipping = false;
 $product_id = 0;
 // If reviews have been modified to display on the product page, $reviewsArray may have already been created, so use it.
 $reviewsArr = empty($reviewsArray) ? [] : $reviewsArray;
@@ -340,6 +341,8 @@ switch ($page_type) {
             : '';
         $manufacturer_name = zen_get_products_manufacturers_name($product_id);
         $product_base_stock = $product_info->fields['products_quantity'];
+        $product_always_free_shipping = isset($product_info->fields['product_is_always_free_shipping'])
+            && (string)$product_info->fields['product_is_always_free_shipping'] === '1';
 
         // OOS BackOrder/PreSales need to have a date field
         $oosItemAvailability = array_key_exists(PLUGIN_SUPERDATA_OOS_DEFAULT, $itemAvailability) ? $itemAvailability[PLUGIN_SUPERDATA_OOS_DEFAULT] : $itemAvailability['OutOfStock'];
@@ -843,7 +846,7 @@ if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
             'deliveryTime' => $shippingDeliveryTime,
         ];
 
-        if ($shippingRateMode === 'Free') {
+        if ($product_always_free_shipping || $shippingRateMode === 'Free') {
             $shippingDetails['shippingRate'] = [
                 '@type' => 'MonetaryAmount',
                 'value' => number_format(0, $decimal_places, '.', ''),
@@ -867,17 +870,19 @@ if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
             $handlingKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_' . $zoneNumber;
             $zoneCountry = defined($countryKey) ? strtoupper(trim((string)constant($countryKey))) : '';
             $zoneRates = defined($ratesKey) ? trim((string)constant($ratesKey)) : '';
-            if ($zoneCountry === '' || $zoneRates === '') {
+            if ($zoneCountry === '' || (!$product_always_free_shipping && $zoneRates === '')) {
                 continue;
             }
             $zoneMethod = defined($methodKey) ? constant($methodKey) : 'weight';
             $zoneBasis = $zoneMethod === 'price' ? (float)$product_base_displayed_price
                 : ($zoneMethod === 'item' ? 1.0 : (float)$weight);
-            $zoneRate = sdata_zone_table_rate(
-                $zoneBasis,
-                $zoneRates,
-                defined($handlingKey) ? constant($handlingKey) : 0
-            );
+            $zoneRate = $product_always_free_shipping
+                ? 0.0
+                : sdata_zone_table_rate(
+                    $zoneBasis,
+                    $zoneRates,
+                    defined($handlingKey) ? constant($handlingKey) : 0
+                );
             $destination = ['@type' => 'DefinedRegion', 'addressCountry' => $zoneCountry];
             $zoneRegions = defined($regionsKey) ? trim((string)constant($regionsKey)) : '';
             if ($zoneRegions !== '') {
