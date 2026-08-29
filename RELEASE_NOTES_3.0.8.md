@@ -11,3 +11,4 @@ SuperData 3.0.8 keeps structured Offer data consistent and prevents PHP floating
 - Normalizes attribute Offer prices and AggregateOffer low and high prices.
 - Applies the fixes to both the encapsulated Plugin Manager package and the legacy storefront file.
 - Reduces Zen Cart 2.2.2 Save All requests by excluding unchanged SuperData fields before submission, preventing oversized configuration POSTs from triggering server security limits.
+- Adds a visible GitHub update link to the installed-version setting because GitHub releases can precede Zen Cart Plugin Library approval.

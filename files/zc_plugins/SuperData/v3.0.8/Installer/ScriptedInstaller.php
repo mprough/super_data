@@ -133,7 +133,7 @@ class ScriptedInstaller extends ScriptedInstallBase
             "INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed SuperData version for reference.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', $this->cgi, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', $this->cgi, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', $this->cgi, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -385,7 +385,7 @@ class ScriptedInstaller extends ScriptedInstallBase
         $this->executeInstallerSql("INSERT IGNORE INTO " . TABLE_CONFIGURATION . "
             (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
             VALUES
-            ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed SuperData version for reference.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
+            ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', $this->cgi, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
             ('Returns - Refund Type', 'PLUGIN_SUPERDATA_RETURNS_REFUND_TYPE', 'FullRefund', 'Refund provided for an accepted return. Choose FullRefund for a full monetary refund, StoreCreditRefund for store credit, or ExchangeRefund when the item is exchanged for the same product. Ignored when returns are not permitted.', $this->cgi, 268, 'zen_cfg_select_option(array(\'FullRefund\', \'StoreCreditRefund\', \'ExchangeRefund\'),')");
         for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
             $zoneDefaultCountry = $zoneNumber === 1 ? 'US' : '';
@@ -401,6 +401,7 @@ class ScriptedInstaller extends ScriptedInstallBase
         }
         $this->executeInstallerSql("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_key IN ('PLUGIN_SUPERDATA_ZONE_TABLE_METHOD', 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES', 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING')");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '3.0.8', set_function = 'zen_cfg_select_option(array(\'3.0.8\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
+        $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Installed version. Check <a href=\"https://github.com/mprough/super_data\" target=\"_blank\" rel=\"noopener\">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.' WHERE configuration_key = 'PLUGIN_SUPERDATA_VERSION'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = 'RateTables' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' AND configuration_value IN ('MerchantCenter', 'ZoneTable')");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = '<strong>RateTables:</strong> Calculate rates for this product from up to five destination tables.<br><strong>Free:</strong> Publish a 0.00 rate only when shipping is genuinely free.<br><strong>FlatRate:</strong> Publish the exact configured charge for every covered product.', set_function = 'zen_cfg_select_option(array(\'RateTables\', \'Free\', \'FlatRate\'),' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE'");
         $this->executeInstallerSql("UPDATE " . TABLE_CONFIGURATION . " SET configuration_description = 'Two-letter ISO 3166-1 destination country, for example US, CA, or GB.' WHERE configuration_key = 'PLUGIN_SUPERDATA_SHIPPING_COUNTRY'");

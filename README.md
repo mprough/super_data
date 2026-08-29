@@ -4,6 +4,8 @@ SuperData adds modern, Google-ready structured data to Zen Cart. It generates Pr
 
 Current version: **3.0.8**
 
+For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
+
 SuperData is the modern continuation of the original 09 Apr 2015 **Super Data Markup** plugin, created by [PRO-Webs](https://pro-webs.net/). Version 3 brings PRO-Webs' original work and the project's subsequent community development together in one maintained package for current and legacy Zen Cart stores.
 
 ## What SuperData generates
