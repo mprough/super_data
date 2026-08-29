@@ -1,4 +1,4 @@
-# SuperData 3.0.7 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.8 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
@@ -19,7 +19,7 @@ SET @superdata_group_id := (
 INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.7', 'Installed SuperData version for reference.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.7\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.8', 'Installed SuperData version for reference.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.8\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', @superdata_group_id, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', @superdata_group_id, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', @superdata_group_id, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),

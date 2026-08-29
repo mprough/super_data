@@ -14,7 +14,7 @@ if (!defined('IS_ADMIN_FLAG')) {
  * @version ZenExpert 19 Dec 2025
  */
 return [
-    'pluginVersion' => 'v3.0.7',
+    'pluginVersion' => 'v3.0.8',
     'pluginName' => 'SuperData',
     'pluginDescription' => 'Modern JSON-LD, Open Graph, and social metadata for Zen Cart.',
     'pluginAuthor' => 'PRO-Webs.net, torvista, Zen4All, ZenExpert',

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-modern='files/zc_plugins/SuperData/v3.0.7/catalog/includes/templates/default/jscript/super_data_jscript.php'
+modern='files/zc_plugins/SuperData/v3.0.8/catalog/includes/templates/default/jscript/super_data_jscript.php'
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
@@ -17,6 +17,8 @@ for file in "$modern" "$legacy"; do
     grep -Fq '(float)$shippingRateValue >= 0' "$file"
     grep -Fq "\$shippingRateMode === 'RateTables'" "$file"
     grep -Fq 'sdata_zone_table_rate(' "$file"
+    grep -Fq 'if ($zoneRate !== null)' "$file"
+    grep -Fq "'price' => number_format((float)\$product_base_displayed_price" "$file"
     grep -Fq "PLUGIN_SUPERDATA_ZONE_TABLE_RATES_" "$file"
     grep -Fq "\$schema['image']" "$file"
     grep -Fq "PLUGIN_SUPERDATA_LOGO" "$file"
@@ -38,7 +40,7 @@ for file in "$modern" "$legacy"; do
 done
 
 if rg -n "MerchantCenter" README.md files/legacy/sql/install.sql files/legacy/includes \
-    files/zc_plugins/SuperData/v3.0.7/catalog; then
+    files/zc_plugins/SuperData/v3.0.8/catalog; then
     echo 'MerchantCenter must not be an active SuperData shipping rate mode.' >&2
     exit 1
 fi

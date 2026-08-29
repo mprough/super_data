@@ -974,20 +974,24 @@ if ($shippingRateMode === 'RateTables'
         $zoneMethod = defined($methodKey) ? constant($methodKey) : 'weight';
         $zoneBasis = $zoneMethod === 'price' ? (float)$product_base_displayed_price : ($zoneMethod === 'item' ? 1.0 : (float)$weight);
         $zoneRate = sdata_zone_table_rate($zoneBasis, $zoneRates, defined($handlingKey) ? constant($handlingKey) : 0);
-        if ($zoneRate === null) {
-            continue;
-        }
         $destination = ['@type' => 'DefinedRegion', 'addressCountry' => $zoneCountry];
         $zoneRegions = defined($regionsKey) ? trim((string)constant($regionsKey)) : '';
         if ($zoneRegions !== '') {
             $destination['addressRegion'] = array_values(array_filter(array_map('trim', explode(',', $zoneRegions))));
         }
-        $rateTableDetails[] = [
+        $rateTableDetail = [
             '@type' => 'OfferShippingDetails',
             'shippingDestination' => $destination,
             'deliveryTime' => $shippingDeliveryTime,
-            'shippingRate' => ['@type' => 'MonetaryAmount', 'value' => number_format($zoneRate, $decimal_places, '.', ''), 'currency' => $shippingCurrency],
         ];
+        if ($zoneRate !== null) {
+            $rateTableDetail['shippingRate'] = [
+                '@type' => 'MonetaryAmount',
+                'value' => number_format($zoneRate, $decimal_places, '.', ''),
+                'currency' => $shippingCurrency,
+            ];
+        }
+        $rateTableDetails[] = $rateTableDetail;
     }
     if ($rateTableDetails !== []) {
         $offerEnhancements['shippingDetails'] = $rateTableDetails;
@@ -1555,11 +1559,11 @@ if (PLUGIN_SUPERDATA_SCHEMA_ENABLE === 'true') {
 
                     if ($attribute_lowPrice === $attribute_highPrice) {
                         $offer['@type'] = 'Offer';
-                        $offer['price'] = $attribute_lowPrice;
+                        $offer['price'] = number_format((float)$attribute_lowPrice, $decimal_places, '.', '');
                     } else {
                         $offer['@type']    = 'AggregateOffer';
-                        $offer['lowPrice'] = $attribute_lowPrice;
-                        $offer['highPrice'] = $attribute_highPrice;
+                        $offer['lowPrice'] = number_format((float)$attribute_lowPrice, $decimal_places, '.', '');
+                        $offer['highPrice'] = number_format((float)$attribute_highPrice, $decimal_places, '.', '');
                         $offer['offerCount'] = $offerCount;
                     }
 
@@ -1592,7 +1596,7 @@ if (PLUGIN_SUPERDATA_SCHEMA_ENABLE === 'true') {
             // Simple product (no attributes)
             $offer = [
                 '@type' => 'Offer',
-                'price' => $product_base_displayed_price,
+                'price' => number_format((float)$product_base_displayed_price, $decimal_places, '.', ''),
                 'url' => htmlspecialchars_decode($canonicalLink),
                 'priceCurrency' => PLUGIN_SUPERDATA_PRICE_CURRENCY,
                 'priceValidUntil'=> date('Y') . '-12-31',

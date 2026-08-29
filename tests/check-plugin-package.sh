@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-version_dir='files/zc_plugins/SuperData/v3.0.7'
+version_dir='files/zc_plugins/SuperData/v3.0.8'
 
 required=(
     'README.md'
@@ -10,12 +10,13 @@ required=(
     "$version_dir/Installer/ScriptedInstaller.php"
     "$version_dir/Installer/languages/english/main.php"
     "$version_dir/admin/includes/extra_datafiles/super_data_menu_name.php"
+    "$version_dir/admin/includes/javascript/configuration.php"
     "$version_dir/catalog/includes/classes/observers/auto.super_data.php"
     "$version_dir/catalog/includes/templates/default/jscript/super_data_jscript.php"
     'files/legacy/YOUR_ADMIN/includes/extra_datafiles/super_data.php'
     'files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
     'files/legacy/sql/install.sql'
-    'files/legacy/sql/upgrade_to_3.0.7.sql'
+    'files/legacy/sql/upgrade_to_3.0.8.sql'
     'files/legacy/sql/uninstall.sql'
 )
 
@@ -24,7 +25,7 @@ for file in "${required[@]}"; do
 done
 
 manifest="$version_dir/manifest.php"
-grep -Fq "'pluginVersion' => 'v3.0.7'" "$manifest"
+grep -Fq "'pluginVersion' => 'v3.0.8'" "$manifest"
 grep -Fq "'pluginName' => 'SuperData'" "$manifest"
 grep -Fq "'pluginAuthor' => 'PRO-Webs.net, torvista, Zen4All, ZenExpert'" "$manifest"
 grep -Fq "'pluginId' => 1984" "$manifest"
@@ -40,11 +41,11 @@ grep -Fq 'protected function getOrCreateConfigGroupId(' "$installer"
 grep -Fq 'public function deleteConfigurationGroup($group, bool $cascadeDeleteKeysToo = false): int' "$installer"
 grep -Fq 'protected function executeUninstall()' "$installer"
 grep -Fq 'executeInstallerSql(' "$installer"
-grep -Fq "'PLUGIN_SUPERDATA_VERSION', '3.0.7'" "$installer"
+grep -Fq "'PLUGIN_SUPERDATA_VERSION', '3.0.8'" "$installer"
 grep -Fq "array(\'RateTables\', \'Free\', \'FlatRate\')" "$installer"
-grep -Fq "define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.7')" \
+grep -Fq "define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.8')" \
     "$version_dir/admin/includes/extra_datafiles/super_data_menu_name.php"
-grep -Fq "define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.7')" \
+grep -Fq "define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.8')" \
     'files/legacy/YOUR_ADMIN/includes/extra_datafiles/super_data.php'
 
 observer="$version_dir/catalog/includes/classes/observers/auto.super_data.php"
@@ -53,6 +54,11 @@ if grep -Fq 'Zencart\\DbRepositories\\PluginControlRepository' "$observer"; then
     exit 1
 fi
 grep -Fq 'dirname(__DIR__, 3)' "$observer"
+
+configuration_js="$version_dir/admin/includes/javascript/configuration.php"
+grep -Fq "PLUGIN_SUPERDATA_VERSION" "$configuration_js"
+grep -Fq "form.addEventListener('submit'" "$configuration_js"
+grep -Fq 'originalField.disabled = true' "$configuration_js"
 
 if grep -Eq '\b(unlink|rmdir)\s*\(' "$installer"; then
     echo 'Installer must not automatically delete existing store files.' >&2

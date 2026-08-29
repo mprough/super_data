@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.7**
+Current version: **3.0.8**
 
 SuperData is the modern continuation of the original 09 Apr 2015 **Super Data Markup** plugin, created by [PRO-Webs](https://pro-webs.net/). Version 3 brings PRO-Webs' original work and the project's subsequent community development together in one maintained package for current and legacy Zen Cart stores.
 
@@ -58,7 +58,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.7/
+    `-- SuperData/v3.0.8/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -71,7 +71,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.7** and select **Install**.
+5. Locate **SuperData 3.0.8** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -185,7 +185,7 @@ Each of the five rate tables independently supports three Google Merchant Center
 
 Each table has its own destination country, optional state or region codes, rate type, tiers, and handling charge. Enter inclusive upper-limit:rate pairs separated by commas. For example, `1:5.95,3:7.95,5:9.95,*:12.95` charges 5.95 through 1 unit, 7.95 through 3 units, 9.95 through 5 units, and 12.95 above 5.
 
-The optional Zone Table handling charge is added after the tier is selected. Keep these manual tiers synchronized with the store's actual shipping charges. If no tier covers the product and no wildcard is present, SuperData omits `shippingRate` instead of publishing an inaccurate amount.
+The optional Zone Table handling charge is added after the tier is selected. Keep these manual tiers synchronized with the store's actual shipping charges. If no tier covers the product and no wildcard is present, SuperData retains the destination and delivery timing in `shippingDetails` but omits only `shippingRate` instead of publishing an inaccurate amount.
 
 ### Shipping timing
 
@@ -309,6 +309,12 @@ Do not automatically drop optional or custom product columns. The current Reimag
 
 After removal, validate SuperData on a product containing Google category, GTIN, and MPN data. Confirm Merchant Center still receives products through the replacement feed method; SuperData JSON-LD is not a substitute for a Merchant Center product feed.
 
+## Offer consistency and price precision addressed in 3.0.8
+
+Version 3.0.8 retains `shippingDetails` for every applicable Offer, including out-of-stock products and products that fall outside the configured rate tiers. When a rate cannot be calculated truthfully, only `shippingRate` is omitted. Product Offer prices, low prices, and high prices are normalized to the configured number of decimal places before JSON encoding.
+
+On Zen Cart 2.2.2, SuperData excludes unchanged fields from the Configuration page's Save All request. This preserves the native Save All behavior while avoiding the duplicated, oversized POST generated when a large configuration group submits both every current value and every original value.
+
 ## Shipping rates addressed in 3.0.7
 
 Version 3.0.7 removes Merchant Center as an on-page shipping rate mode. SuperData now supports Free, FlatRate, and five Merchant Center-style RateTables using price, weight, or item tiers. It also displays the installed SuperData version on the configuration page.
@@ -407,7 +413,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.7`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.8`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -456,7 +462,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 
