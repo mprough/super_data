@@ -784,7 +784,9 @@ if ($page_type === 'product') {
     }
 
     $reviewCount = count($reviewsArr);
-    $ratingValue = round($ratingSum / $reviewCount, 1);
+    $ratingValue = $reviewCount > 0
+        ? round($ratingSum / $reviewCount, 1)
+        : 0;
 }
 
 // Common Offer enhancements. These are assembled once and applied to every
