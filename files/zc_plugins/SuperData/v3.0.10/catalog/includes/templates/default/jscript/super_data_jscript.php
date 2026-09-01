@@ -645,7 +645,7 @@ switch ($page_type) {
     default:
         $image_default = true;
         //$image_alt = $breadcrumb_this_page;//todo, needed??
-        $title = META_TAG_TITLE;
+        $title = !empty(META_TAG_TITLE) ? META_TAG_TITLE : '';
         $description = META_TAG_DESCRIPTION;
 
 }

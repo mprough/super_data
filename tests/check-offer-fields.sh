@@ -5,6 +5,7 @@ modern='files/zc_plugins/SuperData/v3.0.10/catalog/includes/templates/default/js
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
+    grep -Fq "\$title = !empty(META_TAG_TITLE) ? META_TAG_TITLE : '';" "$file"
     grep -Fq "['validFrom']" "$file"
     grep -Fq "if (\$page_type === 'product'" "$file"
     grep -Fq '&& isset($product_date_added)' "$file"
