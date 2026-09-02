@@ -355,6 +355,7 @@ $product_base_sku = '';
 $product_base_stock = 0;
 $product_always_free_shipping = false;
 $product_id = 0;
+$weight = 0.0;
 // If reviews have been modified to display on the product page, $reviewsArray may have already been created, so use it.
 $reviewsArr = empty($reviewsArray) ? [] : $reviewsArray;
 $title = '';
