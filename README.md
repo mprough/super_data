@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.11**
+Current version: **3.0.12**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.11/
+    `-- SuperData/v3.0.12/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.11** and select **Install**.
+5. Locate **SuperData 3.0.12** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -138,6 +138,12 @@ Replace the legacy PHP files, then run only the unapplied SQL upgrades in order:
 1. `files/legacy/sql/upgrade_to_3.0.2.sql`
 2. `files/legacy/sql/upgrade_to_3.0.3.sql`
 3. `files/legacy/sql/upgrade_to_3.0.5.sql`
+4. `files/legacy/sql/upgrade_to_3.0.7.sql`
+5. `files/legacy/sql/upgrade_to_3.0.8.sql`
+6. `files/legacy/sql/upgrade_to_3.0.9.sql`
+7. `files/legacy/sql/upgrade_to_3.0.10.sql`
+8. `files/legacy/sql/upgrade_to_3.0.11.sql`
+9. `files/legacy/sql/upgrade_to_3.0.12.sql`
 
 The upgrade patches add missing settings and refresh Admin instructions without resetting existing values. Back up the database before applying them.
 
@@ -152,10 +158,22 @@ SuperData cannot infer the store's legal identity, shipping promises, or return 
 | Images | Business Image, Logo | Use complete HTTPS URLs. If Business Image is blank, Logo supplies the Schema `image`. |
 | Address | Street, city, region, postal code, country | Country must be a two-letter ISO code such as `US`, `CA`, or `GB`. |
 | Contact | Email, telephone, languages, area served, hours | Use a customer-service number in international format. |
-| Products | Currency, condition, weight, out-of-stock status | Currency must be a three-letter code such as `USD`. |
+| Products | Currency, product price tax mode, condition, weight, out-of-stock status | Currency must be a three-letter code such as `USD`. Tax mode defaults to `Never`. |
 | Offers | validFrom, shippingDetails, rate mode, destination, handling and transit | Follow the shipping guidance below. |
 | Returns | Policy, days, method, fee, refund type, applicable country | Applicable Country is required to publish the policy. |
 | Custom fields | Google Product Category, GTIN, POSM GTIN, POSM MPN | Enter real database column names only when those optional columns exist. |
+
+## Product price tax mode
+
+SuperData applies one tax rule consistently to Schema Product offers, WebPage product offers, and Open Graph product prices.
+
+| Mode | Published product price |
+| --- | --- |
+| `Never` | Zen Cart's product price without tax. This is the default. |
+| `Always` | Product price plus the tax rate Zen Cart resolves for the current visitor. |
+| `LoggedInTaxZone` | Product price plus tax only when the customer is logged in. Zen Cart resolves the rate from that customer's country and zone, so no state or tax percentage is hard-coded. |
+
+If `LoggedInTaxZone` is selected and Zen Cart finds no applicable tax rate for the logged-in customer's address, the published price remains tax-free.
 
 ## Shipping configuration
 
@@ -315,6 +333,10 @@ After removal, validate SuperData on a product containing Google category, GTIN,
 
 Version 3.0.10 recognizes Zen Cart's per-product Always Free Shipping flag. Applicable shipping destinations and delivery timing remain published, while each configured destination receives an exact `0.00` shipping rate instead of a rate-table or flat-rate charge.
 
+## Product price tax handling addressed in 3.0.12
+
+Version 3.0.12 corrects product prices that previously received Zen Cart's tax rate unconditionally. The new Product price tax mode defaults to `Never`, and optionally supports `Always` or `LoggedInTaxZone` without hard-coding a store location, customer location, or tax percentage.
+
 ## Configuration layout addressed in 3.0.9
 
 Version 3.0.9 corrects overlapping configuration sort orders so all five shipping zones remain together and each zone consistently displays rate type, country, regions, rates, and handling charge. Product condition, default weight, and out-of-stock settings now follow the complete shipping section.
@@ -423,7 +445,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.11`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.12`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -472,7 +494,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. Version 3.0.12 restores configurable product-price tax handling and defaults structured-data prices to tax-free output. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 

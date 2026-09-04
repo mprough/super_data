@@ -1,4 +1,4 @@
-# SuperData 3.0.11 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.12 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
@@ -19,7 +19,7 @@ SET @superdata_group_id := (
 INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.11', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.11\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.12', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.12\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', @superdata_group_id, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', @superdata_group_id, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', @superdata_group_id, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -71,6 +71,7 @@ INSERT IGNORE INTO configuration
                 ('Product Shipping Area (Schema, optional)', 'PLUGIN_SUPERDATA_ELIGIBLE_REGION', '', 'Area to which you ship products.<br >Use the ISO 3166-1 (ISO 3166-1 alpha-2) or ISO 3166-2 code, or the GeoShape for the geo-political region(s).', @superdata_group_id, 115, null),
 
                 ('Currency (Schema/OG)', 'PLUGIN_SUPERDATA_PRICE_CURRENCY', '', 'Enter the currency code of the product price e.g.: EUR.', @superdata_group_id, 120, null),
+                ('Product price tax mode', 'PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE', 'Never', '<strong>Never:</strong> Publish product prices without tax.<br><strong>Always:</strong> Add the tax rate Zen Cart resolves for the visitor.<br><strong>LoggedInTaxZone:</strong> Add tax only for a logged-in customer when Zen Cart resolves a tax rate for that customer''s country and zone.', @superdata_group_id, 121, 'zen_cfg_select_option(array(\'Never\', \'Always\', \'LoggedInTaxZone\'),'),
 
                 ('Product Delivery Time when in stock (Schema)', 'PLUGIN_SUPERDATA_DELIVERYLEADTIME', '', 'Enter the average days from order to delivery when product is in stock (e.g.:2).', @superdata_group_id, 125, null),
 
