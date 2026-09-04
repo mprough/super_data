@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.12**
+Current version: **3.0.13**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.12/
+    `-- SuperData/v3.0.13/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.12** and select **Install**.
+5. Locate **SuperData 3.0.13** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -144,6 +144,7 @@ Replace the legacy PHP files, then run only the unapplied SQL upgrades in order:
 7. `files/legacy/sql/upgrade_to_3.0.10.sql`
 8. `files/legacy/sql/upgrade_to_3.0.11.sql`
 9. `files/legacy/sql/upgrade_to_3.0.12.sql`
+10. `files/legacy/sql/upgrade_to_3.0.13.sql`
 
 The upgrade patches add missing settings and refresh Admin instructions without resetting existing values. Back up the database before applying them.
 
@@ -333,9 +334,9 @@ After removal, validate SuperData on a product containing Google category, GTIN,
 
 Version 3.0.10 recognizes Zen Cart's per-product Always Free Shipping flag. Applicable shipping destinations and delivery timing remain published, while each configured destination receives an exact `0.00` shipping rate instead of a rate-table or flat-rate charge.
 
-## Product price tax handling addressed in 3.0.12
+## Product price tax handling addressed in 3.0.12 and 3.0.13
 
-Version 3.0.12 corrects product prices that previously received Zen Cart's tax rate unconditionally. The new Product price tax mode defaults to `Never`, and optionally supports `Always` or `LoggedInTaxZone` without hard-coding a store location, customer location, or tax percentage.
+Version 3.0.12 corrects product prices that previously received Zen Cart's tax rate unconditionally. The new Product price tax mode defaults to `Never`, and optionally supports `Always` or `LoggedInTaxZone` without hard-coding a store location, customer location, or tax percentage. Version 3.0.13 casts Zen Cart's numeric product-price string to a float before rounding, preventing a PHP 8 `TypeError` when tax is excluded.
 
 ## Configuration layout addressed in 3.0.9
 
@@ -445,7 +446,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.12`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.13`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -494,7 +495,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. Version 3.0.12 restores configurable product-price tax handling and defaults structured-data prices to tax-free output. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. Version 3.0.12 restores configurable product-price tax handling and defaults structured-data prices to tax-free output. Version 3.0.13 corrects strict PHP 8 rounding of Zen Cart's numeric price string. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 

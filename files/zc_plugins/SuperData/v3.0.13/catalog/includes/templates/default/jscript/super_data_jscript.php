@@ -27,97 +27,6 @@ if (!defined('IS_ADMIN_FLAG') || IS_ADMIN_FLAG !== false) {
  * @var sniffer $sniffer
  */
 // @formatter:off
-// The database-backed PLUGIN_SUPERDATA_* settings are preferred. Matching
-// PLUGIN_SDATA_* values from the former plugin are used during migration, and
-// safe defaults keep a fresh legacy installation from producing PHP errors.
-$superDataLegacyDefaults = [
-    'PLUGIN_SUPERDATA_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_SCHEMA_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_FOG_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_TWITTER_CARD_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_FOG_APPID' => '',
-    'PLUGIN_SUPERDATA_FOG_ADMINID' => '',
-    'PLUGIN_SUPERDATA_FOG_PAGE' => '',
-    'PLUGIN_SUPERDATA_ORGANIZATION_TYPE' => 'Organization',
-    'PLUGIN_SUPERDATA_LOCAL_BUSINESS_TYPE' => 'Store',
-    'PLUGIN_SUPERDATA_LEGAL_NAME' => '',
-    'PLUGIN_SUPERDATA_DUNS' => '',
-    'PLUGIN_SUPERDATA_LOCAL_BUSINESS_NAME' => '',
-    'PLUGIN_SUPERDATA_DESCRIPTION' => '',
-    'PLUGIN_SUPERDATA_PROPERTY_IMAGE' => '',
-    'PLUGIN_SUPERDATA_LOGO' => '',
-    'PLUGIN_SUPERDATA_PRICE_RANGE' => '',
-    'PLUGIN_SUPERDATA_STREET_ADDRESS' => '',
-    'PLUGIN_SUPERDATA_LOCALITY' => '',
-    'PLUGIN_SUPERDATA_REGION' => '',
-    'PLUGIN_SUPERDATA_POSTALCODE' => '',
-    'PLUGIN_SUPERDATA_COUNTRYNAME' => '',
-    'PLUGIN_SUPERDATA_EMAIL' => '',
-    'PLUGIN_SUPERDATA_TELEPHONE' => '',
-    'PLUGIN_SUPERDATA_FAX' => '',
-    'PLUGIN_SUPERDATA_AVAILABLE_LANGUAGE' => '',
-    'PLUGIN_SUPERDATA_FOG_LOCALES' => '',
-    'PLUGIN_SUPERDATA_AREA_SERVED' => '',
-    'PLUGIN_SUPERDATA_HOURS' => '',
-    'PLUGIN_SUPERDATA_ACCEPTED_PAYMENT_METHODS' => 'PayPal, AmericanExpress, Discover, MasterCard, VISA',
-    'PLUGIN_SUPERDATA_TAXID' => '',
-    'PLUGIN_SUPERDATA_VATID' => '',
-    'PLUGIN_SUPERDATA_SAMEAS' => '',
-    'PLUGIN_SUPERDATA_ELIGIBLE_REGION' => '',
-    'PLUGIN_SUPERDATA_PRICE_CURRENCY' => defined('DEFAULT_CURRENCY') ? DEFAULT_CURRENCY : 'USD',
-    'PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE' => 'Never',
-    'PLUGIN_SUPERDATA_DELIVERYLEADTIME' => '3',
-    'PLUGIN_SUPERDATA_DELIVERYLEADTIME_OOS' => '7',
-    'PLUGIN_SUPERDATA_VALID_FROM_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE' => 'true',
-    'PLUGIN_SUPERDATA_SHIPPING_RATE_MODE' => 'RateTables',
-    'PLUGIN_SUPERDATA_SHIPPING_COUNTRY' => 'US',
-    'PLUGIN_SUPERDATA_SHIPPING_RATE' => '',
-    'PLUGIN_SUPERDATA_HANDLING_MIN_DAYS' => '0',
-    'PLUGIN_SUPERDATA_HANDLING_MAX_DAYS' => '1',
-    'PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS' => '2',
-    'PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS' => '7',
-    'PLUGIN_SUPERDATA_FOG_PRODUCT_CONDITION' => 'new',
-    'PLUGIN_SUPERDATA_DEFAULT_WEIGHT' => '0.5',
-    'PLUGIN_SUPERDATA_OOS_DEFAULT' => 'BackOrder',
-    'PLUGIN_SUPERDATA_OOS_AVAILABILITY_DELAY' => '10',
-    'PLUGIN_SUPERDATA_MAX_NAME' => '150',
-    'PLUGIN_SUPERDATA_MAX_DESCRIPTION' => '5000',
-    'PLUGIN_SUPERDATA_REVIEW_DEFAULT_DATE' => '2020-09-23 13:48:39',
-    'PLUGIN_SUPERDATA_REVIEW_USE_DEFAULT' => 'false',
-    'PLUGIN_SUPERDATA_REVIEW_DEFAULT_VALUE' => '4',
-    'PLUGIN_SUPERDATA_RETURNS_POLICY' => 'Finite',
-    'PLUGIN_SUPERDATA_RETURNS_DAYS' => '14',
-    'PLUGIN_SUPERDATA_RETURNS_METHOD' => 'Mail',
-    'PLUGIN_SUPERDATA_RETURNS_TYPE' => 'FreeReturn',
-    'PLUGIN_SUPERDATA_RETURNS_REFUND_TYPE' => 'FullRefund',
-    'PLUGIN_SUPERDATA_RETURNS_FEE' => '0',
-    'PLUGIN_SUPERDATA_RETURNS_APPLICABLE_COUNTRY' => '',
-    'PLUGIN_SUPERDATA_RETURNS_POLICY_COUNTRY' => '',
-    'PLUGIN_SUPERDATA_GPC_FIELD' => 'products_google_product_category',
-    'PLUGIN_SUPERDATA_GTIN_FIELD' => 'products_gtin',
-    'PLUGIN_SUPERDATA_POS_GTIN_FIELD' => 'pos_gtin',
-    'PLUGIN_SUPERDATA_POS_MPN_FIELD' => 'pos_mpn',
-    'PLUGIN_SUPERDATA_FOG_DEFAULT_PRODUCT_IMAGE' => '',
-    'PLUGIN_SUPERDATA_FOG_DEFAULT_IMAGE' => '',
-    'PLUGIN_SUPERDATA_FOG_TYPE_SITE' => 'business.business',
-    'PLUGIN_SUPERDATA_FOG_TYPE_PRODUCT' => 'product',
-    'PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE' => '',
-    'PLUGIN_SUPERDATA_TWITTER_USERNAME' => '',
-    'PLUGIN_SUPERDATA_TWITTER_PAGE' => '',
-    'PLUGIN_SUPERDATA_GOOGLE_PRODUCT_CATEGORY' => '',
-];
-foreach ($superDataLegacyDefaults as $superDataConstant => $superDataDefault) {
-    if (!defined($superDataConstant)) {
-        $structuredDataConstant = str_replace('PLUGIN_SUPERDATA_', 'PLUGIN_SDATA_', $superDataConstant);
-        define(
-            $superDataConstant,
-            defined($structuredDataConstant) ? constant($structuredDataConstant) : $superDataDefault
-        );
-    }
-}
-unset($superDataLegacyDefaults, $superDataConstant, $superDataDefault, $structuredDataConstant);
-
 if (!defined('PLUGIN_SUPERDATA_ENABLE') || PLUGIN_SUPERDATA_ENABLE !== 'true') {
     return;
 }
@@ -383,6 +292,8 @@ if (PLUGIN_SUPERDATA_TWITTER_DEFAULT_IMAGE !== '') {
 
 // Determine page type
 $page_type = '';
+$product_date_added = null;
+$product_date_available = null;
 global $current_category_has_products, $current_category_has_subcats, $current_category_id, $listing_sql;
 
 if (substr($current_page_base, -5) === '_info'
@@ -420,7 +331,9 @@ switch ($page_type) {
             $product_base_displayed_price = 0;
         } else {
             $product_base_displayed_price = (float)zen_get_products_actual_price($product_id);
-            $priceTaxMode = PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE;
+            $priceTaxMode = defined('PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE')
+                ? PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE
+                : 'Never';
             $includeProductTax = $priceTaxMode === 'Always'
                 || ($priceTaxMode === 'LoggedInTaxZone' && !empty($_SESSION['customer_id']));
             if ($includeProductTax) {
@@ -908,106 +821,98 @@ if ($shippingRateValue !== '' && !is_numeric($shippingRateValue)) {
 }
 
 if (defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
-    && PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE === 'true'
-    && defined('PLUGIN_SUPERDATA_SHIPPING_COUNTRY')
-    && trim(PLUGIN_SUPERDATA_SHIPPING_COUNTRY) !== '') {
-    $shippingCurrency = defined('PLUGIN_SUPERDATA_PRICE_CURRENCY') && PLUGIN_SUPERDATA_PRICE_CURRENCY !== ''
-        ? PLUGIN_SUPERDATA_PRICE_CURRENCY
-        : DEFAULT_CURRENCY;
-
-    $offerEnhancements['shippingDetails'] = [
-        '@type' => 'OfferShippingDetails',
-        'shippingDestination' => [
-            '@type' => 'DefinedRegion',
-            'addressCountry' => strtoupper(trim(PLUGIN_SUPERDATA_SHIPPING_COUNTRY)),
-        ],
-        'deliveryTime' => [
-            '@type' => 'ShippingDeliveryTime',
-            'handlingTime' => [
-                '@type' => 'QuantitativeValue',
-                'minValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MIN_DAYS),
-                'maxValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MAX_DAYS),
-                'unitCode' => 'DAY',
-            ],
-            'transitTime' => [
-                '@type' => 'QuantitativeValue',
-                'minValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS),
-                'maxValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS),
-                'unitCode' => 'DAY',
-            ],
-        ],
-    ];
-
-    if ($product_always_free_shipping || $shippingRateMode === 'Free') {
-        $offerEnhancements['shippingDetails']['shippingRate'] = [
-            '@type' => 'MonetaryAmount',
-            'value' => number_format(0, $decimal_places, '.', ''),
-            'currency' => $shippingCurrency,
-        ];
-    } elseif ($shippingRateMode === 'FlatRate'
-        && $shippingRateValue !== ''
-        && is_numeric($shippingRateValue)
-        && (float)$shippingRateValue >= 0) {
-        $offerEnhancements['shippingDetails']['shippingRate'] = [
-            '@type' => 'MonetaryAmount',
-            'value' => number_format((float)$shippingRateValue, $decimal_places, '.', ''),
-            'currency' => $shippingCurrency,
-        ];
-    }
-}
-
-// RateTables publishes one OfferShippingDetails entry for each configured destination table.
-if ($shippingRateMode === 'RateTables'
-    && defined('PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE')
     && PLUGIN_SUPERDATA_SHIPPING_DETAILS_ENABLE === 'true') {
     $shippingCurrency = defined('PLUGIN_SUPERDATA_PRICE_CURRENCY') && PLUGIN_SUPERDATA_PRICE_CURRENCY !== ''
         ? PLUGIN_SUPERDATA_PRICE_CURRENCY
         : DEFAULT_CURRENCY;
+
     $shippingDeliveryTime = [
         '@type' => 'ShippingDeliveryTime',
-        'handlingTime' => ['@type' => 'QuantitativeValue', 'minValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MIN_DAYS), 'maxValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MAX_DAYS), 'unitCode' => 'DAY'],
-        'transitTime' => ['@type' => 'QuantitativeValue', 'minValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS), 'maxValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS), 'unitCode' => 'DAY'],
+        'handlingTime' => [
+            '@type' => 'QuantitativeValue',
+            'minValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MIN_DAYS),
+            'maxValue' => max(0, (int)PLUGIN_SUPERDATA_HANDLING_MAX_DAYS),
+            'unitCode' => 'DAY',
+        ],
+        'transitTime' => [
+            '@type' => 'QuantitativeValue',
+            'minValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MIN_DAYS),
+            'maxValue' => max(0, (int)PLUGIN_SUPERDATA_TRANSIT_MAX_DAYS),
+            'unitCode' => 'DAY',
+        ],
     ];
-    $rateTableDetails = [];
-    for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
-        $countryKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_' . $zoneNumber;
-        $regionsKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_' . $zoneNumber;
-        $methodKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_' . $zoneNumber;
-        $ratesKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_' . $zoneNumber;
-        $handlingKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_' . $zoneNumber;
-        $zoneCountry = defined($countryKey) ? strtoupper(trim((string)constant($countryKey))) : '';
-        $zoneRates = defined($ratesKey) ? trim((string)constant($ratesKey)) : '';
-        if ($zoneCountry === '' || (!$product_always_free_shipping && $zoneRates === '')) {
-            continue;
-        }
-        $zoneMethod = defined($methodKey) ? constant($methodKey) : 'weight';
-        $zoneBasis = $zoneMethod === 'price' ? (float)$product_base_displayed_price : ($zoneMethod === 'item' ? 1.0 : (float)$weight);
-        $zoneRate = $product_always_free_shipping
-            ? 0.0
-            : sdata_zone_table_rate($zoneBasis, $zoneRates, defined($handlingKey) ? constant($handlingKey) : 0);
-        $destination = ['@type' => 'DefinedRegion', 'addressCountry' => $zoneCountry];
-        $zoneRegions = defined($regionsKey) ? trim((string)constant($regionsKey)) : '';
-        if ($zoneRegions !== '') {
-            $destination['addressRegion'] = array_values(array_filter(array_map('trim', explode(',', $zoneRegions))));
-        }
-        $rateTableDetail = [
+
+    if (($shippingRateMode === 'Free' || $shippingRateMode === 'FlatRate')
+        && defined('PLUGIN_SUPERDATA_SHIPPING_COUNTRY')
+        && trim(PLUGIN_SUPERDATA_SHIPPING_COUNTRY) !== '') {
+        $shippingDetails = [
             '@type' => 'OfferShippingDetails',
-            'shippingDestination' => $destination,
+            'shippingDestination' => [
+                '@type' => 'DefinedRegion',
+                'addressCountry' => strtoupper(trim(PLUGIN_SUPERDATA_SHIPPING_COUNTRY)),
+            ],
             'deliveryTime' => $shippingDeliveryTime,
         ];
-        if ($zoneRate !== null) {
-            $rateTableDetail['shippingRate'] = [
+
+        if ($product_always_free_shipping || $shippingRateMode === 'Free') {
+            $shippingDetails['shippingRate'] = [
                 '@type' => 'MonetaryAmount',
-                'value' => number_format($zoneRate, $decimal_places, '.', ''),
+                'value' => number_format(0, $decimal_places, '.', ''),
+                'currency' => $shippingCurrency,
+            ];
+        } elseif ($shippingRateValue !== '' && is_numeric($shippingRateValue) && (float)$shippingRateValue >= 0) {
+            $shippingDetails['shippingRate'] = [
+                '@type' => 'MonetaryAmount',
+                'value' => number_format((float)$shippingRateValue, $decimal_places, '.', ''),
                 'currency' => $shippingCurrency,
             ];
         }
-        $rateTableDetails[] = $rateTableDetail;
-    }
-    if ($rateTableDetails !== []) {
-        $offerEnhancements['shippingDetails'] = $rateTableDetails;
-    } else {
-        unset($offerEnhancements['shippingDetails']);
+        $offerEnhancements['shippingDetails'] = $shippingDetails;
+    } elseif ($shippingRateMode === 'RateTables') {
+        $rateTableDetails = [];
+        for ($zoneNumber = 1; $zoneNumber <= 5; $zoneNumber++) {
+            $countryKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_COUNTRY_' . $zoneNumber;
+            $regionsKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_REGIONS_' . $zoneNumber;
+            $methodKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_METHOD_' . $zoneNumber;
+            $ratesKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_RATES_' . $zoneNumber;
+            $handlingKey = 'PLUGIN_SUPERDATA_ZONE_TABLE_HANDLING_' . $zoneNumber;
+            $zoneCountry = defined($countryKey) ? strtoupper(trim((string)constant($countryKey))) : '';
+            $zoneRates = defined($ratesKey) ? trim((string)constant($ratesKey)) : '';
+            if ($zoneCountry === '' || (!$product_always_free_shipping && $zoneRates === '')) {
+                continue;
+            }
+            $zoneMethod = defined($methodKey) ? constant($methodKey) : 'weight';
+            $zoneBasis = $zoneMethod === 'price' ? (float)$product_base_displayed_price
+                : ($zoneMethod === 'item' ? 1.0 : (float)$weight);
+            $zoneRate = $product_always_free_shipping
+                ? 0.0
+                : sdata_zone_table_rate(
+                    $zoneBasis,
+                    $zoneRates,
+                    defined($handlingKey) ? constant($handlingKey) : 0
+                );
+            $destination = ['@type' => 'DefinedRegion', 'addressCountry' => $zoneCountry];
+            $zoneRegions = defined($regionsKey) ? trim((string)constant($regionsKey)) : '';
+            if ($zoneRegions !== '') {
+                $destination['addressRegion'] = array_values(array_filter(array_map('trim', explode(',', $zoneRegions))));
+            }
+            $rateTableDetail = [
+                '@type' => 'OfferShippingDetails',
+                'shippingDestination' => $destination,
+                'deliveryTime' => $shippingDeliveryTime,
+            ];
+            if ($zoneRate !== null) {
+                $rateTableDetail['shippingRate'] = [
+                    '@type' => 'MonetaryAmount',
+                    'value' => number_format($zoneRate, $decimal_places, '.', ''),
+                    'currency' => $shippingCurrency,
+                ];
+            }
+            $rateTableDetails[] = $rateTableDetail;
+        }
+        if ($rateTableDetails !== []) {
+            $offerEnhancements['shippingDetails'] = $rateTableDetails;
+        }
     }
 }
 

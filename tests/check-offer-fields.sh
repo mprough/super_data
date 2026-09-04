@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-modern='files/zc_plugins/SuperData/v3.0.12/catalog/includes/templates/default/jscript/super_data_jscript.php'
+modern='files/zc_plugins/SuperData/v3.0.13/catalog/includes/templates/default/jscript/super_data_jscript.php'
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
@@ -44,7 +44,7 @@ for file in "$modern" "$legacy"; do
 done
 
 if rg -n "MerchantCenter" README.md files/legacy/sql/install.sql files/legacy/includes \
-    files/zc_plugins/SuperData/v3.0.12/catalog; then
+    files/zc_plugins/SuperData/v3.0.13/catalog; then
     echo 'MerchantCenter must not be an active SuperData shipping rate mode.' >&2
     exit 1
 fi
@@ -52,6 +52,7 @@ fi
 for storefront in "$modern" "$legacy"; do
     grep -Fq "PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE" "$storefront"
     grep -Fq "!empty(\$_SESSION['customer_id'])" "$storefront"
+    grep -Fq '(float)zen_get_products_actual_price($product_id)' "$storefront"
 done
 
 if grep -Eq 'str_(contains|starts_with|ends_with)|\bfn[[:space:]]*\(|:[[:space:]]*mixed' "$legacy"; then
