@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-modern='files/zc_plugins/SuperData/v3.0.13/catalog/includes/templates/default/jscript/super_data_jscript.php'
+modern='files/zc_plugins/SuperData/v3.0.14/catalog/includes/templates/default/jscript/super_data_jscript.php'
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
@@ -44,7 +44,7 @@ for file in "$modern" "$legacy"; do
 done
 
 if rg -n "MerchantCenter" README.md files/legacy/sql/install.sql files/legacy/includes \
-    files/zc_plugins/SuperData/v3.0.13/catalog; then
+    files/zc_plugins/SuperData/v3.0.14/catalog; then
     echo 'MerchantCenter must not be an active SuperData shipping rate mode.' >&2
     exit 1
 fi
@@ -53,6 +53,20 @@ for storefront in "$modern" "$legacy"; do
     grep -Fq "PLUGIN_SUPERDATA_PRODUCT_PRICE_TAX_MODE" "$storefront"
     grep -Fq "!empty(\$_SESSION['customer_id'])" "$storefront"
     grep -Fq '(float)zen_get_products_actual_price($product_id)' "$storefront"
+    grep -Fq '$product_priced_by_attributes = zen_get_products_price_is_priced_by_attributes($product_id);' "$storefront"
+    grep -Fq 'zen_get_attributes_price_final(' "$storefront"
+    grep -Fq "['availabilityStarts']" "$storefront"
+    test "$(grep -Fc '&& $backPreOrderDate' "$storefront")" -eq 3
+
+    if grep -Fq "['availability_date']" "$storefront"; then
+        echo "Unrecognized availability_date property remains in $storefront." >&2
+        exit 1
+    fi
+
+    if grep -Fq "? \$attribute['options_values_price']" "$storefront"; then
+        echo "Raw attribute components must not be published as complete offer prices in $storefront." >&2
+        exit 1
+    fi
 done
 
 if grep -Eq 'str_(contains|starts_with|ends_with)|\bfn[[:space:]]*\(|:[[:space:]]*mixed' "$legacy"; then
