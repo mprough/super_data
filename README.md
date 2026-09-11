@@ -83,6 +83,24 @@ The scripted installer creates the configuration group and registers its Admin p
 
 If installation reports an existing Structured Data file, SuperData leaves that file untouched. Back it up, rename or remove it, and run the installation again. The installer will not silently delete a customized store file.
 
+## Replace an encapsulated Structured Data installation
+
+Use this order when Structured Data is already installed through Zen Cart Plugin Manager:
+
+1. Back up the store files and database.
+2. Open the old Structured Data configuration and disable its storefront output.
+3. Do not uninstall Structured Data yet. Its `PLUGIN_SDATA_*` settings must still exist when SuperData is installed.
+4. Copy the SuperData `zc_plugins` files into the store and install SuperData through **Modules > Plugin Manager**.
+5. Open **Configuration > SuperData** and confirm that the matching old settings were migrated.
+6. Review all new SuperData settings and validate representative products.
+7. After SuperData is confirmed working, uninstall the old Structured Data plugin through Plugin Manager.
+8. Remove the old Structured Data directory from `zc_plugins` only after Plugin Manager confirms the uninstall.
+9. Clear any template, page, opcode, or CDN cache.
+
+Do not enable both plugins at the same time. Running both storefront outputs can create duplicate Product, Organization, breadcrumb, Open Graph, and Twitter markup.
+
+Uninstalling the old plugin before installing SuperData can remove the `PLUGIN_SDATA_*` values that SuperData is designed to migrate. SuperData uses its own `PLUGIN_SUPERDATA_*` settings, so uninstalling the old plugin after migration does not remove the new configuration.
+
 ## Install on Zen Cart 1.5.6 or 1.5.7
 
 ### Storefront file
