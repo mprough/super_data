@@ -12,4 +12,4 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.14');
+define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.15');

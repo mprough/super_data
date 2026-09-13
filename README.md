@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.14**
+Current version: **3.0.15**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.14/
+    `-- SuperData/v3.0.15/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.14** and select **Install**.
+5. Locate **SuperData 3.0.15** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -164,6 +164,7 @@ Replace the legacy PHP files, then run only the unapplied SQL upgrades in order:
 9. `files/legacy/sql/upgrade_to_3.0.12.sql`
 10. `files/legacy/sql/upgrade_to_3.0.13.sql`
 11. `files/legacy/sql/upgrade_to_3.0.14.sql`
+12. `files/legacy/sql/upgrade_to_3.0.15.sql`
 
 The upgrade patches add missing settings and refresh Admin instructions without resetting existing values. Back up the database before applying them.
 
@@ -352,6 +353,10 @@ After removal, validate SuperData on a product containing Google category, GTIN,
 ## Always Free Shipping addressed in 3.0.10
 
 Version 3.0.10 recognizes Zen Cart's per-product Always Free Shipping flag. Applicable shipping destinations and delivery timing remain published, while each configured destination receives an exact `0.00` shipping rate instead of a rate-table or flat-rate charge.
+
+## Product weight precision addressed in 3.0.15
+
+Version 3.0.15 formats Product and attribute `QuantitativeValue` weights as compact decimal strings before JSON encoding. This prevents server precision settings from expanding a stored value such as `0.4000` into a long binary floating point representation. Shipping calculations and stored product weights are unchanged.
 
 ## Priced-by-attributes offers and availability dates addressed in 3.0.14
 
