@@ -1,4 +1,4 @@
-# SuperData 3.0.16 legacy installer for Zen Cart 1.5.6 and 1.5.7
+# SuperData 3.0.17 legacy installer for Zen Cart 1.5.6 and 1.5.7
 # Run with Admin > Tools > Install SQL Patches. Change table prefixes there if required.
 
 INSERT INTO configuration_group
@@ -19,7 +19,7 @@ SET @superdata_group_id := (
 INSERT IGNORE INTO configuration
                 (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function)
              VALUES
-                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.16', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.16\'),'),
+                ('SuperData version', 'PLUGIN_SUPERDATA_VERSION', '3.0.17', 'Installed version. Check <a href="https://github.com/mprough/super_data" target="_blank" rel="noopener">SuperData on GitHub</a> for the newest release because GitHub updates can appear before Zen Cart Plugin Library approval is complete.', @superdata_group_id, 0, 'zen_cfg_select_option(array(\'3.0.17\'),'),
                 ('Enable SuperData generation', 'PLUGIN_SUPERDATA_ENABLE', 'true', 'Enable the SuperData plugin code', @superdata_group_id, 1, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Schema markup', 'PLUGIN_SUPERDATA_SCHEMA_ENABLE', 'true', 'Show Schema markup?<br>Shows JSON-LD blocks for Organisation and Breadcrumbs on all pages, Product on product pages.', @superdata_group_id, 2, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
                 ('Enable Facebook-Open Graph markup', 'PLUGIN_SUPERDATA_FOG_ENABLE', 'true', 'Show Facebook-Open Graph markup?<br>Shows Facebook og tags on all pages with additional product-specific tags on product pages.', @superdata_group_id, 3, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
@@ -112,6 +112,7 @@ INSERT IGNORE INTO configuration
 
                 ('Custom Product Field - Google Product Category', 'PLUGIN_SUPERDATA_GPC_FIELD', 'products_google_product_category', 'The name of the custom field used in the <strong>products</strong> table for the Google Product Category.', @superdata_group_id, 285, null),
                 ('Custom Product Field - GTIN', 'PLUGIN_SUPERDATA_GTIN_FIELD', 'products_gtin', 'The name of the custom field used in the <strong>products</strong> table for the product-specific code GTIN (EAN, ISBN etc.).', @superdata_group_id, 290, null),
+                ('Default Product Country of Origin', 'PLUGIN_SUPERDATA_COUNTRY_OF_ORIGIN_DEFAULT', '0', 'Standalone fallback used when Google Product Loader is not installed and the product is set to Use store default.', @superdata_group_id, 291, 'superdata_cfg_pull_down_country_of_origin('),
 
                 ('Custom POS Field - GTIN', 'PLUGIN_SUPERDATA_POS_GTIN_FIELD', 'pos_gtin', 'The name of the custom field used in the <strong>products_options_stock</strong> table for the product-specific GTIN code (EAN, ISBN etc.).', @superdata_group_id, 295, null),
                 ('Custom POS Field - MPN', 'PLUGIN_SUPERDATA_POS_MPN_FIELD', 'pos_mpn', 'The name of the custom field used in the <strong>products_options_stock</strong> table for the manufacturers product code.', @superdata_group_id, 300, null),

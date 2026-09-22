@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-modern='files/zc_plugins/SuperData/v3.0.16/catalog/includes/templates/default/jscript/super_data_jscript.php'
+modern='files/zc_plugins/SuperData/v3.0.17/catalog/includes/templates/default/jscript/super_data_jscript.php'
 legacy='files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php'
 
 for file in "$modern" "$legacy"; do
@@ -31,6 +31,7 @@ for file in "$modern" "$legacy"; do
     grep -Fq "function_exists('gpsf_get_product_country_of_origin')" "$file"
     grep -Fq "'products_country_of_origin'" "$file"
     grep -Fq "GPSF_DEFAULT_COUNTRY_OF_ORIGIN" "$file"
+    grep -Fq "PLUGIN_SUPERDATA_COUNTRY_OF_ORIGIN_DEFAULT" "$file"
     grep -Fq "['countryOfOrigin']" "$file"
     grep -Fq "'@type' => 'Country'" "$file"
     grep -Fq "\$schema['image']" "$file"
@@ -53,7 +54,7 @@ for file in "$modern" "$legacy"; do
 done
 
 if rg -n "MerchantCenter" README.md files/legacy/sql/install.sql files/legacy/includes \
-    files/zc_plugins/SuperData/v3.0.16/catalog; then
+    files/zc_plugins/SuperData/v3.0.17/catalog; then
     echo 'MerchantCenter must not be an active SuperData shipping rate mode.' >&2
     exit 1
 fi

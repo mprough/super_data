@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.16**
+Current version: **3.0.17**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.16/
+    `-- SuperData/v3.0.17/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.16** and select **Install**.
+5. Locate **SuperData 3.0.17** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -164,7 +164,7 @@ Replace the legacy PHP files, then run only the unapplied SQL upgrades in order:
 9. `files/legacy/sql/upgrade_to_3.0.12.sql`
 10. `files/legacy/sql/upgrade_to_3.0.13.sql`
 11. `files/legacy/sql/upgrade_to_3.0.14.sql`
-12. Run `files/legacy/sql/upgrade_to_3.0.16.sql` after any earlier legacy upgrade required by the installed version.
+12. Run `files/legacy/sql/upgrade_to_3.0.17.sql` after any earlier legacy upgrade required by the installed version.
 
 The upgrade patches add missing settings and refresh Admin instructions without resetting existing values. Back up the database before applying them.
 
@@ -364,6 +364,8 @@ Version 3.0.16 adds Schema.org `countryOfOrigin` to Product JSON-LD. When Google
 
 The shared product field is `products_country_of_origin`. If the Google Product Loader helper is unavailable, SuperData safely checks the same field and the same `GPSF_DEFAULT_COUNTRY_OF_ORIGIN` fallback. The property is omitted when neither value is configured.
 
+Version 3.0.17 makes this feature independent. Without Google Product Loader, SuperData installs the shared field, adds a per-product country selector, and provides **Default Product Country of Origin** under **Configuration > SuperData**. When Google Product Loader is installed, its product editor and default take precedence. SuperData marks its own default as managed by Google Product Loader instead of presenting a second editable country value.
+
 ## Priced-by-attributes offers and availability dates addressed in 3.0.14
 
 Version 3.0.14 uses Zen Cart's complete calculated “Starting at” price for products priced by attributes instead of treating individual attribute components as independently purchasable offers. POSM single-option variants use Zen Cart's complete calculated variant price and follow the configured product-price tax mode. Backorder and preorder dates now use Schema.org's recognized `availabilityStarts` property and are published only when the applicable product or variant is out of stock.
@@ -480,7 +482,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.16`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.17`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
