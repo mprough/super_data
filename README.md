@@ -2,7 +2,7 @@
 
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
-Current version: **3.0.15**
+Current version: **3.0.16**
 
 For the newest version, fixes, and downloads, check the [SuperData GitHub repository](https://github.com/mprough/super_data). Updates can appear on GitHub before the Zen Cart Plugin Library completes its approval process.
 
@@ -15,7 +15,7 @@ Depending on the page and enabled settings, SuperData can generate:
 - `Organization`, `OnlineBusiness`, or `LocalBusiness`
 - `WebSite` and page information
 - `BreadcrumbList`
-- `Product`
+- `Product`, including `countryOfOrigin` when supplied by Google Product Loader
 - `Offer` or `AggregateOffer`
 - product reviews and aggregate ratings
 - `OfferShippingDetails`
@@ -60,7 +60,7 @@ files/
 |   |-- includes/templates/YOUR_TEMPLATE/
 |   `-- sql/
 `-- zc_plugins/
-    `-- SuperData/v3.0.15/
+    `-- SuperData/v3.0.16/
 ```
 
 - Use `files/zc_plugins` for Zen Cart 2.x.
@@ -73,7 +73,7 @@ files/
 2. Copy the contents of `files/zc_plugins` into the store's existing `zc_plugins` directory.
 3. Sign in to Zen Cart Admin.
 4. Open **Modules > Plugin Manager**.
-5. Locate **SuperData 3.0.15** and select **Install**.
+5. Locate **SuperData 3.0.16** and select **Install**.
 6. Open **Configuration > SuperData**.
 7. Review every store-specific value.
 8. Clear any template, page, opcode, or CDN cache.
@@ -164,7 +164,7 @@ Replace the legacy PHP files, then run only the unapplied SQL upgrades in order:
 9. `files/legacy/sql/upgrade_to_3.0.12.sql`
 10. `files/legacy/sql/upgrade_to_3.0.13.sql`
 11. `files/legacy/sql/upgrade_to_3.0.14.sql`
-12. `files/legacy/sql/upgrade_to_3.0.15.sql`
+12. Run `files/legacy/sql/upgrade_to_3.0.16.sql` after any earlier legacy upgrade required by the installed version.
 
 The upgrade patches add missing settings and refresh Admin instructions without resetting existing values. Back up the database before applying them.
 
@@ -358,6 +358,12 @@ Version 3.0.10 recognizes Zen Cart's per-product Always Free Shipping flag. Appl
 
 Version 3.0.15 formats Product and attribute `QuantitativeValue` weights as compact decimal strings before JSON encoding. This prevents server precision settings from expanding a stored value such as `0.4000` into a long binary floating point representation. Shipping calculations and stored product weights are unchanged.
 
+## Product country of origin added in 3.0.16
+
+Version 3.0.16 adds Schema.org `countryOfOrigin` to Product JSON-LD. When Google Product Loader is installed, SuperData uses its `gpsf_get_product_country_of_origin()` helper so the product override and store default entered for the feed are also used by the structured data. No duplicate country entry is required.
+
+The shared product field is `products_country_of_origin`. If the Google Product Loader helper is unavailable, SuperData safely checks the same field and the same `GPSF_DEFAULT_COUNTRY_OF_ORIGIN` fallback. The property is omitted when neither value is configured.
+
 ## Priced-by-attributes offers and availability dates addressed in 3.0.14
 
 Version 3.0.14 uses Zen Cart's complete calculated “Starting at” price for products priced by attributes instead of treating individual attribute components as independently purchasable offers. POSM single-option variants use Zen Cart's complete calculated variant price and follow the configured product-price tax mode. Backorder and preorder dates now use Schema.org's recognized `availabilityStarts` property and are published only when the applicable product or variant is out of stock.
@@ -474,7 +480,7 @@ Migration does not delete former `PLUGIN_SDATA_*` values, allowing rollback with
 
 The modern package follows the official [Zen Cart plugin documentation](https://docs.zen-cart.com/dev/plugins/):
 
-- complete, versioned fileset under `zc_plugins/SuperData/v3.0.14`
+- complete, versioned fileset under `zc_plugins/SuperData/v3.0.16`
 - `manifest.php` containing name, version, description, authors, Plugin Library ID, supported Zen Cart versions, changelog, and repository
 - class-based `Installer/ScriptedInstaller.php` for installation, upgrades, and uninstall
 - installer-only language definitions under `Installer/languages/english/main.php`
@@ -523,7 +529,7 @@ Contributors across the project's life include PRO-Webs/mprough, torvista, Zen4A
 
 The project returned to the SuperData name and moved to its independent home at [mprough/super_data](https://github.com/mprough/super_data). Version 3 unifies modern and legacy editions, preserves migration from Structured Data settings, and concentrates on accurate Google Product and Offer markup.
 
-Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. Version 3.0.12 restores configurable product-price tax handling and defaults structured-data prices to tax-free output. Version 3.0.13 corrects strict PHP 8 rounding of Zen Cart's numeric price string. Version 3.0.14 corrects priced-by-attributes offers and availability start dates. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
+Version 3.0.5 completed the work around `validFrom`, `shippingDetails`, business images, merchant return policies, and `refundType` across every supported Offer path. Version 3.0.6 keeps the standard return policy on the business and removes its duplicate from individual Offers so Google applies the correct organization-level validation rules. Version 3.0.7 adds manual product-page shipping tiers and removes Merchant Center as an on-page rate mode. Version 3.0.8 keeps shipping details consistent across product availability and rate-tier boundaries while normalizing Offer prices. Version 3.0.12 restores configurable product-price tax handling and defaults structured-data prices to tax-free output. Version 3.0.13 corrects strict PHP 8 rounding of Zen Cart's numeric price string. Version 3.0.14 corrects priced-by-attributes offers and availability start dates. Version 3.0.15 preserves compact product-weight precision. Version 3.0.16 adds Product country-of-origin markup using Google Product Loader's effective value. The rename recognizes the original project while preserving the work and authorship that carried it forward for more than a decade.
 
 ## Bug reports and support
 
