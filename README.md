@@ -8,6 +8,8 @@ For the newest version, fixes, and downloads, check the [SuperData GitHub reposi
 
 SuperData is the modern continuation of the original 09 Apr 2015 **Super Data Markup** plugin, created by [PRO-Webs](https://pro-webs.net/). Version 3 brings PRO-Webs' original work and the project's subsequent community development together in one maintained package for current and legacy Zen Cart stores.
 
+The [configuration reference](docs/configuration-reference.md) lists every current admin setting, its configuration key, and its installation default.
+
 ## What SuperData generates
 
 Depending on the page and enabled settings, SuperData can generate:
