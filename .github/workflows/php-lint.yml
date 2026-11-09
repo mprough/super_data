@@ -26,3 +26,8 @@ jobs:
         run: bash tests/check-offer-fields.sh
       - name: Check Zen Cart plugin package
         run: bash tests/check-plugin-package.sh
+      - name: Check subcategory schema with missing names
+        run: >-
+          php tests/check-subcategory-schema.php
+          files/zc_plugins/SuperData/v3.0.18/catalog/includes/templates/default/jscript/super_data_jscript.php
+          files/legacy/includes/templates/YOUR_TEMPLATE/jscript/jscript_super_data.php
