@@ -1,5 +1,8 @@
 # SuperData for Zen Cart
 
+**Download the install ZIP:** [SuperData-v3.0.18.zip](https://raw.githubusercontent.com/mprough/super_data/master/dist/SuperData-v3.0.18.zip). Extract it on your computer and follow the installation instructions below.
+
+
 SuperData adds modern, Google-ready structured data to Zen Cart. It generates Product and Offer JSON-LD, business identity markup, breadcrumbs, Facebook Open Graph metadata, and Twitter Cards without changing the visible product page.
 
 Current version: **3.0.18**
