@@ -12,7 +12,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.17');
+define('BOX_CONFIGURATION_SUPER_DATA', 'SuperData v3.0.18');
 
 if (!function_exists('superdata_cfg_pull_down_country_of_origin')) {
     function superdata_cfg_pull_down_country_of_origin($countriesId, $key = ''): string

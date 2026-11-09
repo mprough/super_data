@@ -803,12 +803,17 @@ switch ($page_type) {
 
         $list_pos = 1;
         foreach ($sub_cat_data as $list_category) {
+            $category_list_name = $list_category['categories_name'] ?? '';
+            if (trim($category_list_name) === '') {
+                continue;
+            }
+
             $list_cpath = $base_cPath . $list_category['categories_id'];
             $item_link = zen_href_link(FILENAME_DEFAULT, 'cPath=' . $list_cpath);
             $item_image_url = (!empty($list_category['categories_image']))
                 ? HTTP_SERVER . DIR_WS_CATALOG . DIR_WS_IMAGES . $list_category['categories_image']
                 : '';
-            $listing_schema[] = sdata_set_listItem($list_pos, $item_link, $list_category['categories_name'], $item_image_url);
+            $listing_schema[] = sdata_set_listItem($list_pos, $item_link, $category_list_name, $item_image_url);
             $list_pos++;
         }
         break;

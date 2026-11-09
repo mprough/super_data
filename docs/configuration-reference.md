@@ -1,8 +1,8 @@
 # SuperData configuration reference
 
-Current source: SuperData **3.0.17**. Settings appear under **Admin > Configuration > SuperData**. This is a list of the settings installed by the current Plugin Manager package, in admin sort order. Blank defaults are shown as `empty`. Your store's saved values are not overwritten by this reference.
+Current source: SuperData **3.0.18**. Settings appear under **Admin > Configuration > SuperData**. This is a list of the settings installed by the current Plugin Manager package, in admin sort order. Blank defaults are shown as `empty`. Your store's saved values are not overwritten by this reference.
 
-The source of truth is [`files/zc_plugins/SuperData/v3.0.17/Installer/ScriptedInstaller.php`](../files/zc_plugins/SuperData/v3.0.17/Installer/ScriptedInstaller.php), specifically the initial `INSERT IGNORE INTO configuration` block. The legacy installer is [`files/legacy/sql/install.sql`](../files/legacy/sql/install.sql). The latter currently omits the 25 settings for shipping zones 1–5; those are listed below as **Plugin Manager only**. Later migration and upgrade statements in the scripted installer update existing installations and are not additional settings.
+The source of truth is [`files/zc_plugins/SuperData/v3.0.18/Installer/ScriptedInstaller.php`](../files/zc_plugins/SuperData/v3.0.18/Installer/ScriptedInstaller.php), specifically the initial `INSERT IGNORE INTO configuration` block. The legacy installer is [`files/legacy/sql/install.sql`](../files/legacy/sql/install.sql). The latter currently omits the 25 settings for shipping zones 1–5; those are listed below as **Plugin Manager only**. Later migration and upgrade statements in the scripted installer update existing installations and are not additional settings.
 
 When releasing a new version, compare both installers' `configuration_key`, title, default, sort order, descriptions, and choices; update this page and the version above. Check settings added through upgrade SQL as well. Keep differences between installation methods explicit. This document records installation defaults, not a recommended configuration for every store.
 
@@ -10,7 +10,7 @@ When releasing a new version, compare both installers' `configuration_key`, titl
 
 | Admin label | Configuration key | Install default |
 | --- | --- | --- |
-| SuperData version | `PLUGIN_SUPERDATA_VERSION` | `3.0.17` |
+| SuperData version | `PLUGIN_SUPERDATA_VERSION` | `3.0.18` |
 | Enable SuperData generation | `PLUGIN_SUPERDATA_ENABLE` | `true` |
 | Enable Schema markup | `PLUGIN_SUPERDATA_SCHEMA_ENABLE` | `true` |
 | Enable Facebook-Open Graph markup | `PLUGIN_SUPERDATA_FOG_ENABLE` | `true` |
